@@ -1,7 +1,7 @@
 stencil.JS
 ==========
 ######*Javascript templating made easy*
-Stencil.js v10.0  
+Version: 10.0  
 Author: Kingston Chan <kgston@hotmail.com>  
 Last modified: 18 Oct 2014  
 
