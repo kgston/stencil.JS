@@ -14,7 +14,7 @@ automatic nested template generation. Supports design time templating, automatic
 
 Rational
 --------------
-Stencil was developed out of the need for the ability to view and amend the template continuously throughout the design-development process without having to move it in and out of <script> tags or having to chop up templates into multiple parts. Also, template nesting and conditionals comes across as unnecessarily complex with queer symbol semantics that are not immediately obvious to people not familiar with the hieroglyphics, increasing the learning curve. While it is useful to have logic within a templating language, similar to JSP and tag libs, nesting such semantics usually results in a compromise in functionality or legibility. Any sort of logic, should be as much as possible, transparent and determined from the dataset's structure.
+Stencil was developed out of the need for the ability to view and amend the template continuously throughout the design-development process without having to move it in and out of <script> tags or having to chop up templates into multiple parts. Also, template nesting and conditionals comes across as unnecessarily complex with queer symbol semantics that are not immediately obvious to people not familiar with the hieroglyphics, increasing the learning curve. While it is useful to have logic within a templating language, similar to JSP and tag libs, nesting such semantics usually results in a compromise in functionality or legibility. Any sort of logic, should be as much as possible, transparent and determined from the dataset structure.
 
 Usage
 ==========
@@ -44,8 +44,7 @@ If you would like to specify an output location for the generated stencil, you c
     var myStencil = stencil.define("stencilID", "#output .duplicates"); 
 The stencil will be inserted into the inner HTML of the specified element/s.
 
-If you don't need the output to be displayed in a specific location, you can set the destination to "none". 
-Take note that in this case you will need to set the render method output parameter to either "none" or "fragment"
+If you do not need the output to be displayed in a specific location, you can set the destination to "none". Take note that in this case you will need to set the render method output parameter to either "none" or "fragment"
 
 Cloning
 --------------
@@ -74,8 +73,7 @@ All nested keys will be generated
 
 Global data objects
 --------------
-By default, a child stencil will not have access to its parents dataset and while a parent has access to its child's 
-dataset, retrival from an array is currently not supported. However there may be cases where you have data that needs access by parent and child stencils. For such cases you can utilized the reserved global key to store objects that  needs to be propogated to all stencils. For example,
+By default, a child stencil will not have access to its parents dataset and while a parent has access to its child dataset, retrival from an array is currently not supported. However there may be cases where you have data that needs access by parent and child stencils. For such cases you can utilized the reserved global key to store objects that  needs to be propogated to all stencils. For example,
     {{global.foo}}
 Where 
     var JSON = {global: {foo: "accessableByAllStencils"}, bar: "accessableOnlyByParticularStencil"}
@@ -112,7 +110,7 @@ If there was previously any content that was appended or prepended to, it will r
 Rendering Tricks
 --------------
 Rendering within a Table
-Due to HTML restirctions, certain tags aren't allowed to become a child of certain tags. This is most obvious with HTML tables. When you insert stencil tags within the table, the stencil tags will get pushed out of the table on pageload, so the library isn't able to detect the location of the stencils correctly and its template. A workaround is to use the specificChildStencilIDs to define the wrapper element of the replicating contents, but take note of its own limitations
+Due to HTML restirctions, certain tags are not allowed to become a child of certain tags. This is most obvious with HTML tables. When you insert stencil tags within the table, the stencil tags will get pushed out of the table on pageload, so the library is not able to detect the location of the stencils correctly and its template. A workaround is to use the specificChildStencilIDs to define the wrapper element of the replicating contents, but take note of its own limitations
 
 Rendering conditionals
 --------------
