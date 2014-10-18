@@ -153,3 +153,7 @@ APIs
     myStencilObject.clear();
 ```
 *where ? refers to optional parameters*
+
+Dependencies
+==========
+jQuery
