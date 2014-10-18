@@ -1,16 +1,16 @@
 stencil.JS
 ==========
+######*Javascript templating made easy*
+Stencil.js v10.0
+Author: Kingston Chan <kgston@hotmail.com>
+Last modified: 18 Oct 2014
 
-Javascript templating made easy
---------------
-Stencil.js v10.0, Author: Kingston Chan <kgston@hotmail.com>, Last modified: 18 Oct 2014
 Copyright (c) 2014 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).
 Full legal text can be found in licence.txt
 
 Introduction
 --------------
-Stencil is a client side Javascript templating engine that allows for rapid template prototyping and 
-automatic nested template generation. Supports design time templating, automatic template segregation, nested templategeneration, JSON object notation and automatic drop down selection. Inspired by popular JS templating libraries such as Mustache.JS and Transparency.JS.
+Stencil is a client side Javascript templating engine that allows for rapid template prototyping and automatic nested template generation. Supports design time templating, automatic template segregation, nested template generation, JSON object notation and automatic drop down selection. Inspired by popular JS templating libraries such as Mustache.JS and Transparency.JS.
 
 Rational
 --------------
@@ -48,7 +48,7 @@ If for some reason you are unable to insert stencil tags into the HTML code, due
 ```
 *This only works for the first child level. If you need it to be nested further down, you will need to build 2 separate stencil and merge manually it later on*
 
-If you would like to specify an output location for the generated stencil, you can set it as the 2nd parameter duringmanual definition of the stencil using jQuery selector notation:
+If you would like to specify an output location for the generated stencil, you can set it as the 2nd parameter during manual definition of the stencil using jQuery selector notation:
 ```javascript
     var myStencil = stencil.define("stencilID", "#output .duplicates"); 
 ```
@@ -90,7 +90,7 @@ All nested keys will be generated
 
 Global data objects
 --------------
-By default, a child stencil will not have access to its parents dataset and while a parent has access to its child dataset, retrival from an array is currently not supported. However there may be cases where you have data that needs access by parent and child stencils. For such cases you can utilized the reserved global key to store objects that  needs to be propogated to all stencils. For example,
+By default, a child stencil will not have access to its parents dataset and while a parent has access to its child dataset, retrieval from an array is currently not supported. However there may be cases where you have data that needs access by parent and child stencils. For such cases you can utilized the reserved global key to store objects that  needs to be propagated to all stencils. For example,
     `{{global.foo}}`
 Where 
 ```javascript
@@ -111,11 +111,11 @@ Where
 ```
 Rendering
 --------------
-Once you have compiled the stencil and built your template, we can finally render the finalized stencil with the datainside it. Use the following command to generate the output:
+Once you have compiled the stencil and built your template, we can finally render the finalized stencil with the data inside it. Use the following command to generate the output:
     myStencil.render(dataset);
 Where dataset is an array of objects. Each object should contain all the key value pairs for one stencil. Multiple objects in an array will generate multiple copies of the stencil with the respective objects in the order of insertion. If a key value is not found, the engine will leave the field blank and log to the console, if debug is on.
 
-Each stencil object is linked to an output location and does not change over the lifetime of the object. If you wouldwant to hide and get a document fragment, not hide and get a document fragment, append or prepend the generated stencil to the output, you can use the following syntax:
+Each stencil object is linked to an output location and does not change over the lifetime of the object. If you would want to hide and get a document fragment, not hide and get a document fragment, append or prepend the generated stencil to the output, you can use the following syntax:
 ```javascript
     myStencil.render(dataset, "none");
     myStencil.render(dataset, "fragment");
@@ -134,13 +134,13 @@ If there was previously any content that was appended or prepended to, it will r
 Rendering Tricks
 --------------
 Rendering within a Table
-Due to HTML restirctions, certain tags are not allowed to become a child of certain tags. This is most obvious with HTML tables. When you insert stencil tags within the table, the stencil tags will get pushed out of the table on pageload, so the library is not able to detect the location of the stencils correctly and its template. A workaround is to use the `specificChildStencilIDs` to define the wrapper element of the replicating contents, but take note of its own limitations
+Due to HTML restirctions, certain tags are not allowed to become a child of certain tags. This is most obvious with HTML tables. When you insert stencil tags within the table, the stencil tags will get pushed out of the table on page load, so the library is not able to detect the location of the stencils correctly and its template. A workaround is to use the `specificChildStencilIDs` to define the wrapper element of the replicating contents, but take note of its own limitations
 
 Rendering conditionals
 --------------
-There are times where a layout may change depending on certain conditions. So it is very useful to have the ability to be able to change the resulting output based on the input dataset. Stencil however, does not have this ability to define IF ELSE conditionals for template rendering as it can be rather complex to built in such functionality and would generally increase rendering time across the board as additional checks needs to be built in place. However,this functionality may be built in the future as it is possible; if a more elegent solution exists. 
+There are times where a layout may change depending on certain conditions. So it is very useful to have the ability to be able to change the resulting output based on the input dataset. Stencil however, does not have this ability to define IF ELSE conditionals for template rendering as it can be rather complex to built in such functionality and would generally increase rendering time across the board as additional checks needs to be built in place. However,this functionality may be built in the future as it is possible; if a more elegant solution exists. 
 
-A current workaround is to generate all possible layouts into your stencil object by making use of nested stencil child objects. Do your own checks on the dataset and then modify the dataset structure such that it "activates" the correct child template by inserting relavent data into the correct reference variable. Take advantage of the feature where null/undefined reference child stencil variables in the dataset do not generate the resulting templating at all.
+A current workaround is to generate all possible layouts into your stencil object by making use of nested stencil child objects. Do your own checks on the dataset and then modify the dataset structure such that it "activates" the correct child template by inserting relevant data into the correct reference variable. Take advantage of the feature where null/undefined reference child stencil variables in the dataset do not generate the resulting templating at all.
 
 On the same note, if you would like to generate an instance of the child stencil without any data, use an empty object.
 
