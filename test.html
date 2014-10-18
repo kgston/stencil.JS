@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="jquery-1.11.1.js"></script>
+    <script src="stencil.js"></script>
+</head>
+<body>
+    <stencil id="div1">
+        <div>
+            <span>Title: {{title}}</span>
+            <ul>
+                <stencil id="list1">
+                    <li>this is a {{name}} item - {{ctIdx}}</li>
+                </stencil>
+            </ul>
+            <stencil id="list2">
+                <ul>
+                    <li>this is a list item - 2</li>
+                </ul>
+            </stencil>
+        </div>
+    </stencil>
+</body>
+</html>

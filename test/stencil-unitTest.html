@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Stencil - Unit Test</title>
+    <link rel="stylesheet" href="qunit-1.14.0.css">
+    <script src="qunit-1.14.0.js"></script>
+    <script src="../jquery-1.11.1.js"></script>
+    <script src="../stencil.js"></script>
+    <script src="stencil-unitTest.js"></script>
+</head>
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <div id="autosandbox" style="display:none">
+        <div id="autoSimpleTest">
+            <ul>
+                <stencil id="autoSimple">
+                    <li>{{contents}} - {{lpIdx}} - {{ctIdx}}</li>
+                </stencil>
+            </ul>
+        </div>
+        <div id="autoNestedTest">
+            <stencil id="autoNested">
+                <ul>
+                    <stencil id="autoNestedChild">
+                        <li>{{contents}} - {{lpIdx}} - {{ctIdx}}</li>
+                    </stencil>
+                </ul>
+            </stencil>
+        </div>
+    </div>
+
+    <div id="manualsandbox" style="display:none">
+        <div id="specificTagTest">
+            <stencil id="specificTag">
+                <span>{{contents}}</span>
+            </stencil>
+        </div>
+
+        <div id="specificWithDestTest">
+            <stencil id="specificWithDest">
+                <span>{{contents}}</span>
+                <stencil id="specificWithDestChildContainer">
+                    <div>
+                        <ul>
+                            <stencil id="specificWithDestChild">
+                                <li>{{contents}} - {{lpIdx}} - {{ctIdx}}</li>
+                            </stencil>
+                        </ul>
+                    </div>
+                </stencil>
+            </stencil>
+        </div>
+
+        <div id="specificWithDestOutput">
+            <div>Test content</div>
+        </div>
+
+        <div id="specificInnerTest">
+            <stencil id="specificInner">
+                <span>{{contents}}</span>
+                <div id="specificInnerChild1">
+                    {{ctIdx}}. {{contents}}
+                    <br/>
+                </div>
+                <div id="specificInnerChild2">
+                    {{ctIdx}}. {{contents}}
+                    <br/>
+                </div>
+            </stencil>
+        </div>
+
+        <div id="specificInnerOutput"></div>
+
+        <div id="definedOutputTest">
+            <span style="display:block">Test content Head</span>
+            <stencil id="definedOutput">
+                <span>{{contents}}</span>
+                <select id="selectOptions" data-stencilselector="select.selectThis">
+                    <option>{{value}}</option>
+                </select>
+            </stencil>
+            <span style="display:block">Test content Tail</span>
+        </div>
+
+        <div id="toBeClonedTest">
+            <stencil id="toBeCloned">
+                <span>{{contents}}</span>
+                <stencil id="toBeClonedChildContainer">
+                    <div>
+                        <ul>
+                            <stencil id="toBeClonedChild">
+                                <li>{{contents}} - {{lpIdx}} - {{ctIdx}}</li>
+                            </stencil>
+                        </ul>
+                    </div>
+                </stencil>
+            </stencil>
+        </div>
+
+        <div id="clonedOutput"></div>
+
+    </div>
+
+    <div id="rendersandbox">
+        <div id="simpleRenderTest" style="display:none">
+            <stencil id="simpleRender">
+                <span>{{contents}}</span>
+            </stencil>
+        </div>
+
+        <div id="deepRenderTest" style="display:none">
+            <stencil id="deepRender">
+                <span>{{first.second.contents}}</span>
+            </stencil>
+        </div>
+
+        <div id="nestedRenderTest" style="display:none">
+            <stencil id="nestedRender">
+                <span>{{nested{{appended{{lpIdx}}}}}}</span>
+            </stencil>
+        </div>
+
+        <div id="noDataRenderTest" style="display:none">
+            <stencil id="noDataRender">
+                <span>{{first.second.contents}}</span>
+            </stencil>
+        </div>
+
+        <div id="blankRenderTest" style="display:none">
+            <stencil id="blankRender" style="display:none">
+                <span>{{contents}}</span>
+            </stencil>
+        </div>
+
+        <div id="appendRenderOutput" style="display:none">
+            <div>Test content</div>
+        </div>
+
+        <div id="prependRenderOutput" style="display:none">
+            <div>Test content</div>
+        </div>
+
+        <div id="noneRenderOutput" style="display:none">
+        </div>
+
+        <div id="fragmentRenderOutputInitial" style="display:none">
+            <div>Test content</div>
+        </div>
+
+        <div id="fragmentRenderOutputFinal" style="display:none">
+        </div>
+
+        <div id="clearRenderOutput" style="display:none">
+            <div>Test content</div>
+        </div>
+
+        <div id="complexRenderTest" style="display:none">
+            <stencil id="complexRender">
+                <span style="display:block">{{contents}}</span>
+                <stencil id="complexRenderChildContainer">
+                    &nbsp;&nbsp;lpIdx: {{lpIdx}}
+                    <div>
+                        <ul>
+                            <stencil id="complexRenderChild">
+                                <li>{{contents}} - lpIdx: {{lpIdx}} - ctIdx: {{ctIdx}}</li>
+                            </stencil>
+                        </ul>
+                    </div>
+                </stencil>
+            </stencil>
+        </div>
+
+        <div id="complexRenderOutput" style="display:none">
+            <div>Test content</div>
+        </div>
+
+        <div id="clonedRenderOutput" style="display:none">
+            <div>Test content</div>
+        </div>
+
+        <div id="specificChildRenderTest" style="display:none">
+            <stencil id="specificChildRender">
+                <span>{{contents}}</span>
+                <div id="specificChildRenderChild1">
+                    <span>{{contents}}</span>
+                </div>
+                <div id="specificChildRenderChild2">
+                    <span>{{contents}}</span>
+                </div>
+            </stencil>
+        </div>
+
+        <div id="specificChildRenderOutput" style="display:none">
+            
+        </div>
+
+        <div id="definedOutputRenderTest" style="display:none">
+            <span style="display:block">Test content Head</span>
+            <stencil id="definedOutputRender">
+                <span>{{contents}}</span>
+                <select id="renderSelectOptions" data-stencilselector="select.selectThis">
+                    <option value="{{value}}">{{value}}</option>
+                </select>
+            </stencil>
+            <span style="display:block">Test content Tail</span>
+        </div>
+
+    </div>
+</body>
+</html>
