@@ -90,7 +90,7 @@ All nested keys will be generated
 
 Global data objects
 --------------
-By default, a child stencil will not have access to its parents dataset and while a parent has access to its child dataset, retrieval from an array is currently not supported. However there may be cases where you have data that needs access by parent and child stencils. For such cases you can utilized the reserved global key to store objects that  needs to be propagated to all stencils. For example,
+By default, a child stencil will not have access to its parents dataset and while a parent has access to its child dataset, retrieval from an array is currently not supported. However there may be cases where you have data that needs access by parent and child stencils. For such cases you can utilized the reserved `global` key to store objects that  needs to be propagated to all stencils. For example,
     `{{global.foo}}`
 Where 
 ```javascript
@@ -103,7 +103,7 @@ For templating convienence, you can use the special variables lpIdx and ctIdx fo
 
 Selector
 --------------
-In order to use the selector to automatically select an option in a drop down menu, set an attribute called data-stencilselector (to conform to HTML5 specs) to the select elements:
+In order to use the selector to automatically select an option in a drop down menu, set an attribute called `data-stencilselector` (to conform to HTML5 specs) to the select elements:
     `<select data-stencilselector="firstLevel.secondLevel">...</select>`
 Where 
 ```javascript
@@ -117,10 +117,10 @@ Where dataset is an array of objects. Each object should contain all the key val
 
 Each stencil object is linked to an output location and does not change over the lifetime of the object. If you would want to hide and get a document fragment, not hide and get a document fragment, append or prepend the generated stencil to the output, you can use the following syntax:
 ```javascript
-    myStencil.render(dataset, "none");
-    myStencil.render(dataset, "fragment");
-    myStencil.render(dataset, "append");
-    myStencil.render(dataset, "prepend");
+    myStencil.render(JSON, "none");
+    myStencil.render(JSON, "fragment");
+    myStencil.render(JSON, "append");
+    myStencil.render(JSON, "prepend");
 ```
 
 Clearing output
@@ -138,7 +138,7 @@ Due to HTML restirctions, certain tags are not allowed to become a child of cert
 
 Rendering conditionals
 --------------
-There are times where a layout may change depending on certain conditions. So it is very useful to have the ability to be able to change the resulting output based on the input dataset. Stencil however, does not have this ability to define IF ELSE conditionals for template rendering as it can be rather complex to built in such functionality and would generally increase rendering time across the board as additional checks needs to be built in place. However,this functionality may be built in the future as it is possible; if a more elegant solution exists. 
+There are times where a layout may change depending on certain conditions. So it is very useful to have the ability to be able to change the resulting output based on the input dataset. Stencil however, does not have this ability to define IF ELSE conditionals for template rendering as it can be rather complex to built in such functionality and would generally increase rendering time across the board as additional checks needs to be built in place. However, this functionality may be built in the future as it is possible; if a more elegant solution exists. 
 
 A current workaround is to generate all possible layouts into your stencil object by making use of nested stencil child objects. Do your own checks on the dataset and then modify the dataset structure such that it "activates" the correct child template by inserting relevant data into the correct reference variable. Take advantage of the feature where null/undefined reference child stencil variables in the dataset do not generate the resulting templating at all.
 
