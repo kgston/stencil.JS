@@ -6,7 +6,7 @@ Author: Kingston Chan <kgston@hotmail.com>
 Last modified: 19 Oct 2014  
 
 Copyright (c) 2014 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
-Full legal text can be found in licence.txt
+*Full legal text can be found in licence.txt*
 
 Introduction
 --------------
@@ -111,9 +111,11 @@ In order to use the selector to automatically select an option in a drop down me
 ```
 Rendering
 --------------
-Once you have compiled the stencil and built your template, we can finally render the finalized stencil with the data inside it. Use the following command to generate the output:
-    myStencil.render(dataset);
-Where dataset is an array of objects. Each object should contain all the key value pairs for one stencil. Multiple objects in an array will generate multiple copies of the stencil with the respective objects in the order of insertion. If a key value is not found, the engine will leave the field blank and log to the console, if debug is on.
+Once you have compiled the stencil and built your template, we can finally render the finalized stencil with the data inside it. Use the following command to generate the output:   
+```javascript
+myStencil.render(JSON);
+```
+Where `JSON` is an array of objects. Each object should contain all the key value pairs for one stencil. Multiple objects in an array will generate multiple copies of the stencil with the respective objects in the order of insertion. If a key value is not found, the engine will leave the field blank and log to the console, if debug is on.
 
 Each stencil object is linked to an output location and does not change over the lifetime of the object. If you would want to hide and get a document fragment, not hide and get a document fragment, append or prepend the generated stencil to the output, you can use the following syntax:
 ```javascript
