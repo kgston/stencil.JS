@@ -81,7 +81,7 @@ Where
 Nested key generation
 --------------
 Stencil also supports nested keys, allowing runtime determination of the final JSON data to be used. For example:
-    `{{foo{{index}}{{alphaIndex}}}} will result in a final key of {{foo1b}}`
+    `{{foo{{index}}{{alphaIndex}}}}` will result in a final key of `{{foo1b}}`
 Where 
 ```javascript
     var JSON = {foo1b: "valueToBeInserted", index: 1, alphaIndex: b}
