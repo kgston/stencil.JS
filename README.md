@@ -63,8 +63,8 @@ By default, Stencil will remove your stencil template after "compilation". If yo
 Data Insertion
 --------------
 In order to map data from JSON into child stencils, use the following syntax:
-    `{{firstLevel}}`
-Where 
+    `{{firstLevel}}`    
+Where    
 ```javascript
     var JSON = {childStencilID:{firstLevel:"value"}}
 ```
@@ -72,8 +72,8 @@ Where
 Deep object retrival notation
 --------------
 In order to map data from the JSON object into the stencil, use the following syntax anywhere within your template code:
-    `{{firstLevel.secondLevel.thirdLevel}}`
-Where 
+    `{{firstLevel.secondLevel.thirdLevel}}`   
+Where    
 ```javascript
     var JSON = {firstLevel:{secondLevel:{thirdLevel:"value"}}};
 ```
@@ -81,8 +81,8 @@ Where
 Nested key generation
 --------------
 Stencil also supports nested keys, allowing runtime determination of the final JSON data to be used. For example:
-    `{{foo{{index}}{{alphaIndex}}}}` will result in a final key of `{{foo1b}}`
-Where 
+    `{{foo{{index}}{{alphaIndex}}}}` will result in a final key of `{{foo1b}}`   
+Where    
 ```javascript
     var JSON = {foo1b: "valueToBeInserted", index: 1, alphaIndex: b}
 ```
@@ -91,9 +91,9 @@ All nested keys will be generated
 Global data objects
 --------------
 By default, a child stencil will not have access to its parents dataset and while a parent has access to its child dataset, retrieval from an array is currently not supported. However there may be cases where you have data that needs access by parent and child stencils. For such cases you can utilized the reserved `global` key to store objects that  needs to be propagated to all stencils. For example,
-    `{{global.foo}}`
-Where 
-```javascript
+    `{{global.foo}}`    
+Where    
+```javascript 
     var JSON = {global: {foo: "accessableByAllStencils"}, bar: "accessableOnlyByParticularStencil"}
 ```
 
@@ -104,8 +104,8 @@ For templating convienence, you can use the special variables lpIdx and ctIdx fo
 Selector
 --------------
 In order to use the selector to automatically select an option in a drop down menu, set an attribute called `data-stencilselector` (to conform to HTML5 specs) to the select elements:
-    `<select data-stencilselector="firstLevel.secondLevel">...</select>`
-Where 
+    `<select data-stencilselector="firstLevel.secondLevel">...</select>`    
+Where    
 ```javascript
     var JSON = {firstLevel:{secondLevel:"valueToSelect"}
 ```
