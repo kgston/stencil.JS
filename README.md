@@ -3,7 +3,7 @@ stencil.JS
 ######*Javascript templating made easy*
 Version: 10.1  
 Author: Kingston Chan <kgston@hotmail.com>  
-Last modified: 18 Oct 2014  
+Last modified: 19 Oct 2014  
 
 Copyright (c) 2014 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
 Full legal text can be found in licence.txt
