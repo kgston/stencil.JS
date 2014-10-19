@@ -113,7 +113,7 @@ Rendering
 --------------
 Once you have compiled the stencil and built your template, we can finally render the finalized stencil with the data inside it. Use the following command to generate the output:   
 ```javascript
-myStencil.render(JSON);
+    myStencil.render(JSON);
 ```
 Where `JSON` is an array of objects. Each object should contain all the key value pairs for one stencil. Multiple objects in an array will generate multiple copies of the stencil with the respective objects in the order of insertion. If a key value is not found, the engine will leave the field blank and log to the console, if debug is on.
 
