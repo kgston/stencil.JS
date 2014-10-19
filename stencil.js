@@ -37,8 +37,8 @@ var stencil = {
                 //JSON dataset - Array[Objects], optional?output - String, private!parentElem - Element]
                 render: function (dataset, output, parentElem) {
                     //Check for errors in the dataset and return false early if there is no data
-                    if (!(dataset instanceof Array)) {
-                        if(dataset instanceof Object) {
+                    if (!(Array.isArray(dataset))) {
+                        if(stencil.util.isObject(dataset)) {
                             dataset = [dataset];
                         } else {
                             stencil.util.log("Stencil - " + this.tagID + ": dataset in an invalid format, detected: " + typeof dataset);
@@ -106,9 +106,6 @@ var stencil = {
                         param.ctIdx = loopIdx + 1; //Special key for counter index
                         var curOutput = template;
 
-                        // curOutput = curOutput.replace("{{lpIdx}}", param.lpIdx);
-                        // curOutput = curOutput.replace("{{ctIdx}}", param.ctIdx);
-
                         //Search through whole doc for {{*}} items
                         while (curOutput.search(/\{\{[\w.]*\}\}/) >= 0) {
                             //Get the key
@@ -137,11 +134,11 @@ var stencil = {
                             var nextParamSet = param[key];
                             if(param.global != null) {
                                 //Check if the param set is an array or an object and allocate accordingly
-                                if(nextParamSet instanceof Array) {
+                                if(Array.isArray(nextParamSet)) {
                                     nextParamSet.forEach(function(obj) {
                                         obj.global = param.global;
                                     });
-                                } else if (nextParamSet instanceof Object) {
+                                } else if (stencil.util.isObject(nextParamSet)) {
                                     nextParamSet.global = param.global;
                                 }
                             }
@@ -419,6 +416,9 @@ var stencil = {
                 }
             });
             return value;
+        },
+        isObject: function(obj) {
+            return obj === Object(obj);
         },
         log: function(content) {
             if(stencil.opts.debug) {
