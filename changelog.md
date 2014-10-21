@@ -18,3 +18,7 @@ version 10.0
 version 10.1
 -------------
 1. Fixed issues with detecting Arrays and Objects
+
+version 10.2
+-------------
+1. Fixed issue when stencil replaces the parent instead of emptying and appending which causes a lost of data that was attached to the parent element

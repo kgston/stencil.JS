@@ -177,8 +177,10 @@ var stencil = {
                             //parentElem.replaceWith(destinationElem.clone().empty()); Depreciated as data is already cleared in the beginning
                             return destinationElem.children();
                         }
-                       parentElem.replaceWith(destinationElem);
-                       return true;
+                        //Old code does a replace with which destroys existing data attached to the parent
+                        //parentElem.replaceWith(destinationElem); DEPRECIATED
+                        parentElem.empty().append(destinationElem.children());
+                        return true;
                     }
                 }
             };
