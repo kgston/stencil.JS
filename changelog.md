@@ -22,3 +22,8 @@ version 10.1
 version 10.2
 -------------
 1. Fixed issue when stencil replaces the parent instead of emptying and appending which causes a lost of data that was attached to the parent element
+
+version 10.3
+-------------
+1. Better error handling when using none as a destination and render output type is not supported
+2. Improved performance with selector

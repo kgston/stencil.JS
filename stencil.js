@@ -55,8 +55,13 @@ var stencil = {
                     var destinationElem;
                     //If this is the starting stencil
                     if(parentElem == null) {
-                        if(destination === "none" && (output === "none" || output === "fragment")) {
-                            destinationElem = $(document.createElement('div'));
+                        if(destination === "none") {
+                            if(output === "none" || output === "fragment") {
+                                destinationElem = $(document.createElement('div'));
+                            } else {
+                                stencil.util.log("Stencil: Only render output type \"none\" or \"fragment\" is supported for stencils with no destination");
+                                return false
+                            }
                         } else {
                             //Search for the destination DOM and get its parent
                             parentElem = $(destination);
@@ -313,6 +318,7 @@ var stencil = {
                     //Added selected attribute this way as jQuery clone option does not clone properties
                     //Creates issues when using the returned HTML code from render
                     this.setAttribute("selected", ""); 
+                    return false;
                 }
             });
         },
