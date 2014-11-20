@@ -30,8 +30,9 @@ var stencil = {
                 //Each object should contain all necessary key value pairs to insert into template.
                 //Keys that are not found will be rendered as blank and logged to console if debug is on.
                 //Optional output string which control display options. Default: clear output then render
-                //Implemented: "none", "fragment", "append", "prepend" -> Clear rendering on screen and get string output, string output 
-                //only leaving output container as-is, append after & append before with output container as-is
+                //Implemented: "none", "fragment", "string", "append", "prepend" -> Clear rendering on screen and get DOM output, DOM output 
+                //only leaving output container as-is, literal string output leaving output container as-is, append after 
+                //& append before with output container as-is
                 //Private parentElem for internal use only. Used to determine its parent during recursive calls and
                 //also used to determine if its is the first stencil being called.
                 //JSON dataset - Array[Objects], optional?output - String, private!parentElem - Element]
@@ -56,11 +57,11 @@ var stencil = {
                     //If this is the starting stencil
                     if(parentElem == null) {
                         if(destination === "none") {
-                            if(output === "none" || output === "fragment") {
+                            if(output === "none" || output === "string" || output === "fragment") {
                                 destinationElem = $(document.createElement('div'));
                             } else {
-                                stencil.util.log("Stencil: Only render output type \"none\" or \"fragment\" is supported for stencils with no destination");
-                                return false
+                                stencil.util.log("Stencil: Only render output type \"none\", \"fragment\" or \"string\" is supported for stencils with no destination");
+                                return false;
                             }
                         } else {
                             //Search for the destination DOM and get its parent
@@ -75,7 +76,10 @@ var stencil = {
                     } else {
                         //Otherwise determine its destination via its parent
                         //This is to reduce the performance impact from a full search to just a search within its parent
-                        destinationElem = parentElem.find(destination);
+                        //Added the destination replacement for "\" for cases where specificInner id="foo{{lpIdx}}" and later declared as "foo\\{\\{lpidx\\}\\}"
+                        //due to jQuery limitation, the resulting destination becomes "foo\{\{lpidx\}\}". So the destination needs 3 final backslashes to find
+                        //the destination
+                        destinationElem = parentElem.find(destination.replace(/\\/g, "\\\\\\"));
                     }
                     var template = this.template;
                     var childStencils = this.childStencils;
@@ -84,9 +88,7 @@ var stencil = {
                     //If destination is valid...
                     if(destinationElem.length) {
                         //And if output === ...
-                        if(output === "append") {
-                            this.existingContent = destinationElem.html();
-                        } else if (output === "prepend") {
+                        if(output === "append" || output === "prepend") {
                             //Copy contents for appending after template generation and empty 
                             this.existingContent = destinationElem.html();
                             destinationElem.empty();
@@ -95,7 +97,7 @@ var stencil = {
                             parentElem.empty();
                             destinationElem.empty();
                         } else {
-                            //Else Fragment behaviour is to leave the output alone and return the fragement
+                            //Else Fragment or String behaviour is to leave the output alone and return the fragement
                             destinationElem.empty();
                         }
                     } else {
@@ -181,10 +183,14 @@ var stencil = {
                         if(output === "none" || output === "fragment") {
                             //parentElem.replaceWith(destinationElem.clone().empty()); Depreciated as data is already cleared in the beginning
                             return destinationElem.children();
+                        } else if(output === "string") {
+                            return destinationElem.html();
+                        } else if(output !== "append") {
+                            //Empty the output container first if its not appending
+                            parentElem.empty();
                         }
-                        //Old code does a replace with which destroys existing data attached to the parent
-                        //parentElem.replaceWith(destinationElem); DEPRECIATED
-                        parentElem.empty().append(destinationElem.children());
+
+                        parentElem.append(destinationElem.children());
                         return true;
                     }
                 }

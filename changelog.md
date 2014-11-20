@@ -27,3 +27,9 @@ version 10.3
 -------------
 1. Better error handling when using none as a destination and render output type is not supported
 2. Improved performance with selector
+
+version 11
+-------------
+1. Added string render output option to get pure string output
+2. Added solution for specificInners IDs which contain insertion objects e.g. {{lpIdx}}
+3. Updated solution for append render output option that doesn't refresh existing content that its appending to
