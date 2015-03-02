@@ -414,7 +414,11 @@ var stencil = {
         getKeyValue: function(obj, keyString) {
             var value;
             //Drill down search for placeholders with foo.bar.key notation
-            keyString.split(".").every(function(keyPart, splitIdx) {
+            keyString.split(/[\.\[\]]/).every(function(keyPart, splitIdx) {
+                if(keyPart === "") {
+                    return true;
+                }
+
                 if(splitIdx === 0) {
                     value = (obj[keyPart] == null)? 
                         stencil.util.log("Stencil: " + keyPart + " of " + keyString + " not found"): obj[keyPart];

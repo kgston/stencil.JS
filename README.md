@@ -1,7 +1,7 @@
 stencil.JS
 ==========
 ######*Javascript templating made easy*
-Version: 11 
+Version: 12 
 Author: Kingston Chan <kgston@hotmail.com>  
 Last modified: 19 Nov 2014  
 
@@ -72,10 +72,10 @@ In order to map data from JSON into child stencils, use the following syntax:
 Deep object retrival notation
 --------------
 In order to map data from the JSON object into the stencil, use the following syntax anywhere within your template code:
-    `{{firstLevel.secondLevel.thirdLevel}}`   
+    `{{firstLevel[secondLevel].thirdLevel[1]}}`   
 ***Where:***    
 ```javascript
-    var JSON = {firstLevel:{secondLevel:{thirdLevel:"value"}}};
+    var JSON = {firstLevel:{secondLevel:{thirdLevel:["foo", "value", "bar"]}}};
 ```
 
 Nested key generation
