@@ -1,10 +1,11 @@
+//Version 13
 var stencil = {
     stencilHolder: {},
     //Define a new Stencil instance given a 
     //compulsory TagID as a template; which will include the inner HTML of the element the ID points to,
     //an optional destination, where the it will render to the inner HTML of all elements given with the given class,
     //If no destination is specified, template will output after the template with its own output container
-    //and optional speficInners, which lists all Tag IDs of childStencils that do not use/unable to use standard stencil tags
+    //and optional specificInners, which lists all Tag IDs of childStencils that do not use/unable to use standard stencil tags
     //and optional finalOutputElementType where you can specify a type of element container to hold your output
     //<stencil> tags
     //Element ID - String, optional?Element class - String, optional?Element IDs - Array[String], optional?Element type - String
@@ -236,6 +237,18 @@ var stencil = {
         if(!tagElem.length) {
             stencil.util.log("Stencil: Tag ID '" + tagID + "' provided is not found!");
             return null;
+        }
+
+        //Check if data-childStencil attribute exists and set it into the specific inners array
+        if(tagElem.attr("data-childStencil") != null && tagElem.attr("data-childStencil") != "") {
+            if(specificInners == null) {
+                specificInners = [];
+            }
+            tagElem.attr("data-childStencil").split(" ").forEach(function(childStencilID) {
+                if(childStencilID != "") {
+                    specificInners.push(childStencilID);
+                }
+            });
         }
         
         //Otherwise build a new stencil

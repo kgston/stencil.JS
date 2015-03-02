@@ -207,6 +207,19 @@
             <span style="display:block">Test content Tail</span>
         </div>
 
+        <div id="attributeChildStencilTest" style="display:none">
+            <stencil id="attributeChildStencilRender">
+                <div>{{content}} - {{lpIdx}}</div>
+                <stencil id="innerStencil" data-childStencil="ddl ddl1">
+                    <select id="ddl">
+                        <option>{{item}} - {{lpIdx}}</option>
+                    </select>
+                    <select id="ddl1">
+                        <option>{{item}} - {{lpIdx}}</option>
+                    </select>
+                </stencil>
+            </stencil>
+        </div>
     </div>
 </body>
 </html>

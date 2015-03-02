@@ -37,3 +37,7 @@ version 11
 version 12
 -------------
 1. Updated depp object retrival notation to support array notation a.k.a. array[123].foo[bar]
+
+version 13
+-------------
+1. Added in functionality to define childStencils as an attribute in the stencil tag using the attribute name "data-childStencil". Multiple values can be delimited by spaces

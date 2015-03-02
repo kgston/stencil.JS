@@ -1,9 +1,9 @@
 stencil.JS
 ==========
 ######*Javascript templating made easy*
-Version: 12 
+Version: 13 
 Author: Kingston Chan <kgston@hotmail.com>  
-Last modified: 19 Nov 2014  
+Last modified: 02 Mar 2015  
 
 Copyright (c) 2014 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
 *Full legal text can be found in licence.txt*
@@ -46,7 +46,21 @@ If for some reason you are unable to insert stencil tags into the HTML code, due
 ```javascript
     var myStencil = stencil.define("parentStencilID", null, ["childStencilID1", "childStencilID2", ...]);
 ```
-*This only works for the first child level. If you need it to be nested further down, you will need to build 2 separate stencil and merge manually it later on*
+*This only works for simple stencils without any childStencils ir stencils whose child is not a child of a child. Fo such cases, define the childStencils as an attribute of the immediate parent stencil using the attribute name "data-childStencil". Multiple values are delimited by spaces 
+
+```html
+    <stencil id="attributeChildStencilRender">
+        <div>{{content}} - {{lpIdx}}</div>
+        <stencil id="innerStencil" data-childStencil="ddl ddl1">
+            <select id="ddl">
+                <option>{{item}} - {{lpIdx}}</option>
+            </select>
+            <select id="ddl1">
+                <option>{{item}} - {{lpIdx}}</option>
+            </select>
+        </stencil>
+    </stencil>
+```
 
 If you would like to specify an output location for the generated stencil, you can set it as the 2nd parameter during manual definition of the stencil using jQuery selector notation:
 ```javascript

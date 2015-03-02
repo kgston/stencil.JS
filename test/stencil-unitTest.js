@@ -143,6 +143,7 @@ QUnit.module("Rendering", {
             render.cloneRender = stencil.define("complexRender", "#clonedRenderOutput");
             render.specificChildRender = stencil.define("specificChildRender", "#specificChildRenderOutput", ["specificChildRenderChild1", "specificChildRenderChild2"]);
             render.definedOutputRender = stencil.define("definedOutputRender", null, ["renderSelectOptions"], "div");
+            render.attributeChildStencilRender = stencil.define("attributeChildStencilRender", "#attributeChildStencilTest");
             render.rendered = true;
         }
     },
@@ -477,4 +478,46 @@ QUnit.test("Clear Test", function(assert) {
     });
     render.clearRender.clear();
     assert.ok($("#clearRenderOutput").children().first().html().trim() === "Test content", "Place content back after clearing");
+});
+
+QUnit.test("Attribute Defined Child Stencil Test", function(assert) {
+    var dataset = [];
+    for(var i = 0; i < options.iterationCount; i++) {
+        dataset.push({
+            content: "outerStencil",
+            innerStencil: {
+                ddl: [{
+                    item: "foo"
+                }, {
+                    item: "foo"
+                }, {
+                    item: "foo"
+                }],
+                ddl1: [{
+                    item: "bar"
+                }, {
+                    item: "bar"
+                }, {
+                    item: "bar"
+                }]
+            }
+        });
+    }
+    assert.ok(render.attributeChildStencilRender.render(dataset), "Render output");
+
+    $("#attributeChildStencilTest").children().each(function(index) {
+        if(index % 3 === 0) {
+            assert.ok(this.innerHTML == ("outerStencil - " + (index / 3)), "Outer stencil output - " + (index / 3));
+        } else {
+            var key = null;
+            if(index % 3 === 1) {
+                key = "foo";
+            } else {
+                key = "bar";
+            }
+            $(this).children().each(function(innerIndex) {
+                assert.ok(this.innerHTML == key + " - " + innerIndex, "inner ddl stencil output - " + index + "-" + innerIndex);
+            });
+        }
+    });
 });
