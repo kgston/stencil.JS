@@ -176,9 +176,9 @@ var stencil = {
                         //This is to reduce DOM clutter and conform to W3C HTML standards (the stencil-output tag still
                         //does not conform, but you can change that under stencil.opts.defaultOutputElement or set
                         //it during define as the 4th parameter)
-                        if(!stencil.opts.debug) {
+                        //if(!stencil.opts.debug) {
                             stencil.util.cleanUpStencils(destinationElem);
-                        }
+                        //}
                         
                         //If output === "none", return output node to user
                         if(output === "none" || output === "fragment") {
@@ -267,22 +267,26 @@ var stencil = {
 
         //Check if there are any non standard specific child stencils
         if(specificInners != null) {
-            specificInners.forEach(function(innerTagID) {
+            specificInners.every(function(innerTagID) {
                 stencil.util.log("Stencil: Building specified child stencil: " + innerTagID);
                 var tag = $("#" + stencil.util.escapeCSS(innerTagID));
                 if(!tag.length) {
                     stencil.util.log("Stencil: Specified child stencil: " + innerTagID + " not found!");
+                    return false;
                 }
 
                 //Changed this from ID to class selector because when you replicate multiple copies of the parent 
                 //stencil, it will cause issues with ID selector as there are multiple tags with the same ID
                 //May consider removing innerTagID from ID to clean up
-                tag.addClass(innerTagID);
-                var innerDestination = "." + stencil.util.escapeCSS(innerTagID); //Convert to JQuery class selector format
+                //Use a GUID as a destination address to prevent mix up from tagID as it may be a stencil variable
+                var newDestination = stencil.util.guid();
+                tag.addClass(newDestination);
+                var innerDestination = "." + newDestination; //Convert to JQuery class selector format
                 
                 childStencils[innerTagID] = getStencil(innerTagID, innerDestination, tag.html());
                 childStencils[innerTagID].isStandard = false;
                 tag.empty();
+                return true;
             });
         }
         

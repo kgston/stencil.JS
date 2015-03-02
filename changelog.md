@@ -43,3 +43,6 @@ version 13
 1. Added in functionality to define childStencils as an attribute in the stencil tag using the attribute name "data-childStencil". Multiple values can be delimited by spaces
 2. Escape tagIDs that have reserved CSS characters
 3. Depreciated defining childStencils via stencil.define method
+4. Fixed bug where setting a stencil variable as an ID for a childStencil will cause issues with rendering being unable to output to destination
+5. Disabled display of replication containers when debug is enabled to prevent display issues
+6. Ensure that if a childStencil fails, it will skip generation attempt

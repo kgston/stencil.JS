@@ -99,8 +99,8 @@ QUnit.test("Manual Build Test - Specified Tag with Destination and Specfic Child
     assert.ok(Object.keys(stencils.specificInner.childStencils).length === 2, "Correct number of childStencils");
     assert.ok(stencils.specificInner.destination === "#specificInnerOutput", "Output container linkage");
     
-    assert.ok(stencils.specificInner.childStencils.specificInnerChild1.destination === ".specificInnerChild1", "childStencil1 destination");
-    assert.ok(stencils.specificInner.childStencils.specificInnerChild2.destination === ".specificInnerChild2", "childStencil2 destination");
+    assert.ok(isGUID(stencils.specificInner.childStencils.specificInnerChild1.destination), "childStencil1 destination");
+    assert.ok(isGUID(stencils.specificInner.childStencils.specificInnerChild2.destination), "childStencil2 destination");
 });
 
 QUnit.test("Manual Build Test - Specified Tag without Destination but with Specific Childs and Defined Output Container", function(assert) {
