@@ -5,7 +5,7 @@ Version: 13
 Author: Kingston Chan <kgston@hotmail.com>  
 Last modified: 02 Mar 2015  
 
-Copyright (c) 2014 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
+Copyright (c) 2014-2015 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
 *Full legal text can be found in licence.txt*
 
 Introduction
