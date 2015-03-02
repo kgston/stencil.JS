@@ -36,7 +36,7 @@ version 11
 
 version 12
 -------------
-1. Updated depp object retrival notation to support array notation a.k.a. array[123].foo[bar]
+1. Updated deep object retrival notation to support array notation a.k.a. array[123].foo[bar]
 
 version 13
 -------------
