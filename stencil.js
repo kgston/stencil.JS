@@ -135,6 +135,11 @@ var stencil = {
 
                         //Output main to screen
                         curDestElem.append(curOutput);
+
+                        //Remove the GUID class that is used as a destination for non standard child stencils
+                        if(!isStandard) {
+                            curDestElem.removeClass(destination.replace(".", ""));
+                        }
                         
                         //If childStencils has stencils, render those after the parentStencil has been drawn
                         Object.keys(childStencils).forEach(function(key) {
