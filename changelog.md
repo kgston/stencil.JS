@@ -46,7 +46,4 @@ version 13
 4. Fixed bug where setting a stencil variable as an ID for a childStencil will cause issues with rendering being unable to output to destination
 5. Disabled display of replication containers when debug is enabled to prevent display issues
 6. Ensure that if a childStencil fails, it will skip generation attempt
-<<<<<<< HEAD
 7. Ensure that destination class is removed from non standard child stencils
-=======
->>>>>>> origin/master
