@@ -41,3 +41,5 @@ version 12
 version 13
 -------------
 1. Added in functionality to define childStencils as an attribute in the stencil tag using the attribute name "data-childStencil". Multiple values can be delimited by spaces
+2. Escape tagIDs that have reserved CSS characters
+3. Depreciated defining childStencils via stencil.define method

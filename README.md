@@ -42,26 +42,25 @@ If you want to limit auto build to a section of the page, just call:
 ```
 *Note that this method only supports stencil tags in default configuration.*
 
-If for some reason you are unable to insert stencil tags into the HTML code, due to HTML requirements e.g. outside `<tr>...</tr>` tags, you may wrap them in any tag that is valid, like `<tbody id="childStencilID">...</tbody>` and give it an ID. This only works for child stencils, so you will need to insert a parent stencil surrounding the child e.g. around the `<table>...</table>` tags. Use the following code to define child stencils:
-```javascript
-    var myStencil = stencil.define("parentStencilID", null, ["childStencilID1", "childStencilID2", ...]);
-```
-*This only works for simple stencils without any childStencils or stencils whose child is a child of a child. For such cases, define the childStencils as an attribute of the immediate parent stencil using the attribute name "data-childStencil". Multiple values are delimited by spaces 
+If for some reason you are unable to insert stencil tags into the HTML code, due to HTML requirements e.g. outside `<tr>...</tr>` tags, you may wrap them in any tag that is valid, like `<tbody id="childStencilID">...</tbody>` and give it an ID. This only works for child stencils, so you will need to insert a parent stencil surrounding the child e.g. around the `<table>...</table>` tags and define the childStencils as an attribute of the immediate parent stencil using the attribute name "data-childStencil". Multiple values are delimited by spaces. Use the following code to define child stencils:
 
 ```html
     <stencil id="attributeChildStencilRender">
         <div>{{content}} - {{lpIdx}}</div>
-        <stencil id="innerStencil" data-childStencil="ddl ddl1">
+        <stencil id="innerStencil" data-childStencil="ddl ddl{{lpIdx}}">
             <select id="ddl">
                 <option>{{item}} - {{lpIdx}}</option>
             </select>
-            <select id="ddl1">
-                <option>{{item}} - {{lpIdx}}</option>
+            <select id="ddl{{lpIdx}}">
+                <option>{{item}} - {{ctIdx}}</option>
             </select>
         </stencil>
     </stencil>
 ```
-
+***The following style of defining childStencils has been depreciated due it its limited functionality. Please use the above method to define childStencils*** 
+```javascript
+    var myStencil = stencil.define("parentStencilID", null, ["childStencilID1", "childStencilID2", ...]);
+```
 If you would like to specify an output location for the generated stencil, you can set it as the 2nd parameter during manual definition of the stencil using jQuery selector notation:
 ```javascript
     var myStencil = stencil.define("stencilID", "#output .duplicates"); 
