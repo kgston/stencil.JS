@@ -46,7 +46,7 @@ If for some reason you are unable to insert stencil tags into the HTML code, due
 ```javascript
     var myStencil = stencil.define("parentStencilID", null, ["childStencilID1", "childStencilID2", ...]);
 ```
-*This only works for simple stencils without any childStencils ir stencils whose child is not a child of a child. Fo such cases, define the childStencils as an attribute of the immediate parent stencil using the attribute name "data-childStencil". Multiple values are delimited by spaces 
+*This only works for simple stencils without any childStencils or stencils whose child is a child of a child. For such cases, define the childStencils as an attribute of the immediate parent stencil using the attribute name "data-childStencil". Multiple values are delimited by spaces 
 
 ```html
     <stencil id="attributeChildStencilRender">
