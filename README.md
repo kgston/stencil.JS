@@ -42,7 +42,7 @@ If you want to limit auto build to a section of the page, just call:
 ```
 *Note that this method only supports stencil tags in default configuration.*
 
-If for some reason you are unable to insert stencil tags into the HTML code, due to HTML requirements e.g. outside `<tr>...</tr>` tags, you may wrap them in any tag that is valid, like `<tbody id="childStencilID">...</tbody>` and give it an ID. This only works for child stencils, so you will need to insert a parent stencil surrounding the child e.g. around the `<table>...</table>` tags and define the childStencils as an attribute of the immediate parent stencil using the attribute name "data-childStencil". Multiple values are delimited by spaces. Use the following code to define child stencils:
+If for some reason you are unable to insert stencil tags into the HTML code, due to HTML requirements e.g. outside `<tr>...</tr>` tags, you may wrap them in any tag that is valid, like `<tbody id="childStencilID">...</tbody>` and give it an ID. This only works for child stencils, so you will need to insert a parent stencil surrounding the child e.g. around the `<table>...</table>` tags and define the childStencils as an attribute of the immediate parent stencil using the attribute name "data-childStencil". Multiple values are delimited by spaces. This is an example on how to properly define a child stencil:
 
 ```html
     <stencil id="attributeChildStencilRender">
