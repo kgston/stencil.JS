@@ -1,4 +1,8 @@
-//Version 13
+/*
+stencil.js
+version 13.1
+Kingston Chan - Released under the MIT licence
+*/
 var stencil = {
     stencilHolder: {},
     //Define a new Stencil instance given a 
@@ -23,6 +27,28 @@ var stencil = {
                 existingContent: "",
                 clear: function() {
                     $(this.destination).empty().append(this.existingContent);
+                },
+
+                getChild: function(childID) {
+                    var currentChildStencils = this.childStencils;
+                    var found = null;
+                    if(Object.keys(currentChildStencils).length === 0) {
+                        return null;
+                    }
+                    if(Object.keys(currentChildStencils).indexOf(childID) >= 0) {
+                        found = currentChildStencils[childID];
+                    } else {
+                        Object.keys(currentChildStencils).every(function(childStencil) {
+                            var result = currentChildStencils[childStencil].getChild(childID);
+                            if(result == null) {
+                                return true;
+                            } else {
+                                found = result;
+                                return false;
+                            }
+                        });
+                    }
+                    return found;
                 },
 
                 //Renders out a stencil template into screen given
@@ -329,16 +355,17 @@ var stencil = {
         //Creates a new GUID
         guid: function () {
             //Retrieved from http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
-            function s4() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
+            var d = new Date().getTime();
+            if(window.performance && typeof window.performance.now === "function"){
+                d += performance.now(); //use high-precision timer if available
             }
-            return function () {
-                return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-                    s4() + '-' + s4() + s4() + s4();
-            };
-        }(),
+            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = (d + Math.random()*16)%16 | 0;
+                d = Math.floor(d/16);
+                return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+            });
+            return uuid;
+        },
         //Selects the given value in the drop down box for the given select element 
         selectOption: function(selectElement, valueToSelect) {
             selectElement.children().each(function() {

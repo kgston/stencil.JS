@@ -47,3 +47,9 @@ version 13
 5. Disabled display of replication containers when debug is enabled to prevent display issues
 6. Ensure that if a childStencil fails, it will skip generation attempt
 7. Ensure that destination class is removed from non standard child stencils
+
+version 13.1
+-------------
+1. Upgraded guid function to take advantage of performance.now() if avaliable
+2. Included author info in source
+3. Added a getChild function in the stencil object to recursively find any child stencil under its parent
