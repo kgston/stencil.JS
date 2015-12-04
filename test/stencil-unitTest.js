@@ -94,7 +94,7 @@ QUnit.test("Manual Build Test - Specified Tag with Destination And Nesting", fun
 });
 
 QUnit.test("Manual Build Test - Specified Tag with Destination and Specfic Childs", function(assert) {
-    stencils.specificInner = stencil.define("specificInner", "#specificInnerOutput", ["specificInnerChild1", "specificInnerChild2"]);
+    stencils.specificInner = stencil.define("specificInner", "#specificInnerOutput");
     assert.ok(typeof stencils.specificInner === "object", "Stencil generation");
     assert.ok(Object.keys(stencils.specificInner.childStencils).length === 2, "Correct number of childStencils");
     assert.ok(stencils.specificInner.destination === "#specificInnerOutput", "Output container linkage");
@@ -104,7 +104,7 @@ QUnit.test("Manual Build Test - Specified Tag with Destination and Specfic Child
 });
 
 QUnit.test("Manual Build Test - Specified Tag without Destination but with Specific Childs and Defined Output Container", function(assert) {
-    stencils.definedOutput = stencil.define("definedOutput", null, ["selectOptions"], "div");
+    stencils.definedOutput = stencil.define("definedOutput", null, "div");
     assert.ok(typeof stencils.definedOutput === "object", "Stencil generation");
     assert.ok(Object.keys(stencils.definedOutput.childStencils).length === 1, "Correct number of childStencils");
     assert.ok($("#definedOutputTest>div").length === 1, "Output container generated");
@@ -141,8 +141,8 @@ QUnit.module("Rendering", {
             render.blankRender = stencil.define("blankRender");
             render.complexRender = stencil.define("complexRender", "#complexRenderOutput");
             render.cloneRender = stencil.define("complexRender", "#clonedRenderOutput");
-            render.specificChildRender = stencil.define("specificChildRender", "#specificChildRenderOutput", ["specificChildRenderChild1", "specificChildRenderChild2"]);
-            render.definedOutputRender = stencil.define("definedOutputRender", null, ["renderSelectOptions"], "div");
+            render.specificChildRender = stencil.define("specificChildRender", "#specificChildRenderOutput");
+            render.definedOutputRender = stencil.define("definedOutputRender", null, "div");
             render.attributeChildStencilRender = stencil.define("attributeChildStencilRender", "#attributeChildStencilTest");
             render.rendered = true;
         }

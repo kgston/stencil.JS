@@ -3,11 +3,12 @@
 <head>
     <meta charset="utf-8">
     <title>Stencil - Unit Test</title>
-    <link rel="stylesheet" href="qunit-1.14.0.css">
-    <script src="qunit-1.14.0.js"></script>
-    <script src="../jquery-1.11.1.js"></script>
+    <link rel="stylesheet" href="qunit-1.20.0.css">
     <script src="Polyfill.js"></script>
-    <script src="../stencil.js"></script>
+    <script src="../jquery-1.11.1.js"></script>
+    <script src="qunit-1.20.0.js"></script>
+    <script src="blanket.js" data-cover-flags="debug"></script>
+    <script src="../stencil.js" data-cover></script>
     <script src="stencil-unitTest.js"></script>
 </head>
 <body>
@@ -59,7 +60,7 @@
         </div>
 
         <div id="specificInnerTest">
-            <stencil id="specificInner">
+            <stencil id="specificInner" data-childStencil="specificInnerChild1 specificInnerChild2">
                 <span>{{contents}}</span>
                 <div id="specificInnerChild1">
                     {{ctIdx}}. {{contents}}
@@ -76,7 +77,7 @@
 
         <div id="definedOutputTest">
             <span style="display:block">Test content Head</span>
-            <stencil id="definedOutput">
+            <stencil id="definedOutput" data-childStencil="selectOptions">
                 <span>{{contents}}</span>
                 <select id="selectOptions" data-stencilselector="select.selectThis">
                     <option>{{value}}</option>
@@ -182,7 +183,7 @@
         </div>
 
         <div id="specificChildRenderTest" style="display:none">
-            <stencil id="specificChildRender">
+            <stencil id="specificChildRender" data-childStencil="specificChildRenderChild1 specificChildRenderChild2">
                 <span>{{contents}}</span>
                 <div id="specificChildRenderChild1">
                     <span>{{contents}}</span>
@@ -199,7 +200,7 @@
 
         <div id="definedOutputRenderTest" style="display:none">
             <span style="display:block">Test content Head</span>
-            <stencil id="definedOutputRender">
+            <stencil id="definedOutputRender" data-childStencil="renderSelectOptions">
                 <span>{{contents}}</span>
                 <select id="renderSelectOptions" data-stencilselector="select.selectThis">
                     <option value="{{value}}">{{value}}</option>

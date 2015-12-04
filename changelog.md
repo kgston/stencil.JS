@@ -58,3 +58,8 @@ version 13.2
 -------------
 1. Improved performance when rendering fragments and strings with a very large parent destination by removing redundant cloning and emptying of the DOM
 2. Added namespace to css guid classes to identify it is a class used by stencil
+
+version 14
+-------------
+1. Now able to define a stencil directly from a document fragment
+2. Compatible with stencilTemplates v1
