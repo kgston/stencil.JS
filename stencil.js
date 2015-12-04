@@ -1,6 +1,6 @@
 /*
 stencil.js
-version 13.1
+version 13.2
 Kingston Chan - Released under the MIT licence
 */
 var stencil = {
@@ -83,7 +83,9 @@ var stencil = {
                     var destinationElem;
                     //If this is the starting stencil
                     if(parentElem == null) {
-                        if(destination === "none") {
+                        //Search for the destination DOM and get its parent
+                        parentElem = $(destination);
+                        if(destination === "none" || output === "none" || output === "string" || output === "fragment") {
                             if(output === "none" || output === "string" || output === "fragment") {
                                 destinationElem = $(document.createElement('div'));
                             } else {
@@ -91,8 +93,6 @@ var stencil = {
                                 return false;
                             }
                         } else {
-                            //Search for the destination DOM and get its parent
-                            parentElem = $(destination);
                             //Make a clone of one of the destination (in case there may be more than 1)
                             //Don't empty it yet as we may need the data in the element
                             //From here on out, it will add changes to the cloned element which is separate fragment
@@ -123,8 +123,9 @@ var stencil = {
                             //None behaviour is to empty the output and return the fragement
                             parentElem.empty();
                             destinationElem.empty();
-                        } else {
+                        } else if(output === "string" || output === "fragment") {
                             //Else Fragment or String behaviour is to leave the output alone and return the fragement
+                        } else {
                             destinationElem.empty();
                         }
                     } else {

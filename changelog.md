@@ -53,3 +53,7 @@ version 13.1
 1. Upgraded guid function to take advantage of performance.now() if avaliable
 2. Included author info in source
 3. Added a getChild function in the stencil object to recursively find any child stencil under its parent
+
+version 13.2
+-------------
+1. Improved performance when rendering fragments and strings with a very large parent destination by removing redundant cloning and emptying of the DOM
