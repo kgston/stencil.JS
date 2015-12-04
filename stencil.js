@@ -365,7 +365,7 @@ var stencil = {
                 d = Math.floor(d/16);
                 return (c=='x' ? r : (r&0x3|0x8)).toString(16);
             });
-            return uuid;
+            return "stencil-" + uuid;
         },
         //Selects the given value in the drop down box for the given select element 
         selectOption: function(selectElement, valueToSelect) {

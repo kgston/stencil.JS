@@ -11,7 +11,7 @@ var isGUID = function(guid) {
     return /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/.test(guid);
 }
 var isDestination = function(guid) {
-    return /[\\.#][0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/.test(guid);
+    return /[\\.#]stencil-[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/.test(guid);
 }
 var hasChildOutputContainer = function(template) {
     return /[.\\n\\r]*<stencil-output.*><\/stencil-output>[.\\n\\r]*/.test(template);
