@@ -63,3 +63,7 @@ version 14
 -------------
 1. Now able to define a stencil directly from a document fragment
 2. Compatible with stencilTemplates v1
+
+version 14.1
+-------------
+1. Added namespacing support for custom tags in < IE 10

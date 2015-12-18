@@ -1,9 +1,9 @@
 stencil.JS
 ==========
 ######*Javascript templating made easy*
-Version: 13.2 
+Version: 14.1
 Author: Kingston Chan <kgston@hotmail.com>  
-Last modified: 04 Dec 2015  
+Last modified: 18 Dec 2015  
 
 Copyright (c) 2014-2016 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
 *Full legal text can be found in licence.txt*
@@ -57,7 +57,7 @@ If for some reason you are unable to insert stencil tags into the HTML code, due
         </stencil>
     </stencil>
 ```
-***The following style of defining childStencils has been depreciated due it its limited functionality. Please use the above method to define childStencils*** 
+***The following style of defining childStencils has been __REMOVED__ since version 14 due it its limited functionality. Please use the above method to define childStencils*** 
 ```javascript
     var myStencil = stencil.define("parentStencilID", null, ["childStencilID1", "childStencilID2", ...]);
 ```
@@ -160,11 +160,19 @@ A current workaround is to generate all possible layouts into your stencil objec
 
 On the same note, if you would like to generate an instance of the child stencil without any data, use an empty object.
 
+Support for IE 10 and below
+--------------
+As Stencil uses custom tags to define templates and also during the rendering process, support has been quite finicky on older IE browsers. However, a fix has been implemented using namespaces. By adding a namespace to the `<html>` tag, it should work out of the box with IE9. For IE 8 and below, polyfills for ES5 functions will be required.
+```html
+<html xmlns:STENCIL>
+```
+
+
 APIs
 ==========
 ```javascript
     stencil.build(?startElementID);
-    stencil.define(stencilID, ?outputDestination, ?["specificChildStencilIDs"], ?elementType)
+    stencil.define(stencilID, ?outputDestination, ?elementType)
     myStencilObject.render(dataset, ?output);
     myStencilObject.clear();
 ```

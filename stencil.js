@@ -1,6 +1,6 @@
 /*
 stencil.js
-version 14
+version 14.1
 Kingston Chan - Released under the MIT licence
 */
 var stencil = {
@@ -395,7 +395,7 @@ var stencil = {
         //Returns a valid jQuery selector string to the elements created
         createWrapper: function(locationElement, wrapperName, creationType) {
             var classID = stencil.util.guid();
-            var newWrapper = document.createElement(wrapperName);
+            var newWrapper = document.createElement(stencil.opts.ieNs + wrapperName);
             newWrapper.className = (newWrapper.className === "")? classID : newWrapper.className + " " + classID;
             locationElement[creationType](newWrapper);
             return wrapperName + "." + classID; //Convert to JQuery class selector format
@@ -405,7 +405,11 @@ var stencil = {
             var stencils = {};
             function search(startElement, collection) {
                 var isStencilTag = function(element) {
-                    return element.nodeName === "STENCIL";
+                    if(element.nodeName === "STENCIL" || element.nodeName === "stencil") {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 };
 
                 //For each child in the starting node
@@ -427,7 +431,12 @@ var stencil = {
         cleanUpStencils: function(startElement) {
             function unwrapper(startElement) {
                 var isStencilTypeTag = function(element) {
-                    return element.nodeName.indexOf("STENCIL") > -1;
+                    if(element.nodeName.indexOf("STENCIL") >= 0 ||
+                        element.nodeName.indexOf("stencil") >= 0) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 };
 
                 //If it is a stencil generated element
@@ -548,6 +557,10 @@ var stencil = {
             });
             return value;
         },
+        isIE: function() {
+            var myNav = navigator.userAgent.toLowerCase();
+            return (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
+        },
         isObject: function(obj) {
             return obj === Object(obj);
         },
@@ -558,7 +571,17 @@ var stencil = {
         }
     },
     opts: {
-        debug: false,
-        defaultOutputElement: "stencil-output"
+        debug: true,
+        defaultOutputElement: "stencil-output",
+        ieNs: ""
     }
 };
+
+(function() {
+    if(stencil.util.isIE()) {
+        document.createElement("stencil");
+        document.createElement("stencil-replicator");
+        document.createElement("stencil-output");
+        stencil.opts.ieNs = "STENCIL:";
+    }
+})();
