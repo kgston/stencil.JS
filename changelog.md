@@ -67,3 +67,8 @@ version 14
 version 14.1
 -------------
 1. Added namespacing support for custom tags in < IE 10
+
+version 14.2
+-------------
+1. Fixed bug in IE10 in IE namespacing where jquery.find() was namespace dependent
+2. Fixed bug caused by the above bug fix

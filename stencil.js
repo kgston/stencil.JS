@@ -1,6 +1,6 @@
 /*
 stencil.js
-version 14.1
+version 14.2
 Kingston Chan - Released under the MIT licence
 */
 var stencil = {
@@ -78,7 +78,7 @@ var stencil = {
                             return false;
                         }
                     } else if(dataset == null || dataset.length === 0) {
-                        stencil.util.log("Stencil: no dataset passed in");
+                        stencil.util.log("Stencil - " + this.tagID + ": was not passed in data");
                         return false;
                     }
                     
@@ -111,7 +111,7 @@ var stencil = {
                         //Added the destination replacement for "\" for cases where specificInner id="foo{{lpIdx}}" and later declared as "foo\\{\\{lpidx\\}\\}"
                         //due to jQuery limitation, the resulting destination becomes "foo\{\{lpidx\}\}". So the destination needs 3 final backslashes to find
                         //the destination
-                        destinationElem = parentElem.find(destination.replace(/\\/g, "\\\\\\"));
+                        destinationElem = parentElem.find(destination.replace(/\\(?=\{|\})/g, "\\\\\\"));
                     }
                     var template = this.template;
                     var childStencils = this.childStencils;
@@ -398,7 +398,7 @@ var stencil = {
             var newWrapper = document.createElement(stencil.opts.ieNs + wrapperName);
             newWrapper.className = (newWrapper.className === "")? classID : newWrapper.className + " " + classID;
             locationElement[creationType](newWrapper);
-            return wrapperName + "." + classID; //Convert to JQuery class selector format
+            return stencil.util.escapeCSS(stencil.opts.ieNs) + wrapperName + "." + classID; //Convert to JQuery class selector format
         },
         //Finds all next level stencil tags and not further
         findStencils: function (startElement) {
@@ -578,7 +578,8 @@ var stencil = {
 };
 
 (function() {
-    if(stencil.util.isIE()) {
+    var isIE = stencil.util.isIE();
+    if(isIE != false && isIE < 10) {
         document.createElement("stencil");
         document.createElement("stencil-replicator");
         document.createElement("stencil-output");
