@@ -72,3 +72,8 @@ version 14.2
 -------------
 1. Fixed bug in IE10 in IE namespacing where jquery.find() was namespace dependent
 2. Fixed bug caused by the above bug fix
+
+version 15
+-------------
+1. Uses $.extend to create namespace
+2. Added fetch functionality to retrieve and generate a stencil template via AJAX
