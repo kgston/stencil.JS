@@ -1,9 +1,10 @@
-/*
-stencil.js
-version 15
-Kingston Chan - Released under the MIT licence
-https://github.com/kgston/stencil.JS
+/**
+ * @preserve stencil.js
+ * version 15 - 02 Feb 2015
+ * Kingston Chan - Released under the MIT licence
+ * https://github.com/kgston/stencil.JS
 */
+//# @preserve sourceMappingURL=stencil-15.0.min.map
 var stencil = stencil || {};
 stencil.opts = $.extend(stencil.opts || {}, function() {
     return {
@@ -22,7 +23,7 @@ stencil = $.extend(stencil || {}, (function() {
             Returns a jQuery promise. Set a callback to the progress event to get a stencil object one by one in order defined in the response or to the done event to get a array of all stencil objects.
         */
         //url - String
-        fetch: function(url) {
+        fetch: function(url, destination) {
             if(url == null) {
                 stencil.util.log("Stencil: No valid URL was passed in");
                 return;
@@ -49,11 +50,11 @@ stencil = $.extend(stencil || {}, (function() {
                     }
                     
                     var $template = $(this);
-                    var fetchedTemplate = stencil.define($template[0].id, "none", null, $template);
+                    var fetchedTemplate = stencil.define($template[0].id, destination || "none", null, $template);
                     templatesList.push(fetchedTemplate);
                     fetchRequest.notify(fetchedTemplate);
                 });
-                fetchRequest.done(templatesList);
+                fetchRequest.resolve(templatesList);
                 
             }).fail(function(jqXHR) {
                 stencil.util.log("Stencil: Failed to fetched template at <" + url + "> due to " + jqXHR.status + ":" + jqXHR.statusText);
@@ -318,7 +319,7 @@ stencil = $.extend(stencil || {}, (function() {
                     destination = stencil.util
                     .createWrapper(
                         $(existingStencil.destination), 
-                        (finalOutputElementType == null)? stencil.opts.defaultOutputElement: finalOutputElementType, 
+                        finalOutputElementType || stencil.opts.defaultOutputElement, 
                         "after");
                 }
                 //Set the local destination as the template destination, either from above code or user defined destination
@@ -336,7 +337,7 @@ stencil = $.extend(stencil || {}, (function() {
                 if(destination == null) {
                     destination = stencil.util.createWrapper(
                         tagElem, 
-                        (finalOutputElementType == null)? stencil.opts.defaultOutputElement: finalOutputElementType, 
+                        finalOutputElementType || stencil.opts.defaultOutputElement,
                         "after");
                 }
                 stencilFragment = tagElem.detach();

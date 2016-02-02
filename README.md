@@ -1,9 +1,9 @@
 stencil.JS
 ==========
 ######*Javascript templating made easy*
-Version: 14.1
+Version: 15.0
 Author: Kingston Chan <kgston@hotmail.com>  
-Last modified: 18 Dec 2015  
+Last modified: 02 Feb 2015  
 
 Copyright (c) 2014-2016 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
 *Full legal text can be found in licence.txt*
@@ -27,6 +27,8 @@ Compilation
 There are 2 ways to "compile" the templates for use. You can manually define a stencil by calling:
 ```javascript
     var myStencil = stencil.define("stencilID"); 
+    //OR specify a jQuery style destination to automatically render to a one or more elements in the DOM
+    var myStencil = stencil.define("stencilID", "#optionalOutputDestination");
 ```
 and get back a stencil object OR
 
@@ -68,6 +70,14 @@ If you would like to specify an output location for the generated stencil, you c
 The stencil will be inserted into the inner HTML of the specified element/s.
 
 If you do not need the output to be displayed in a specific location, you can set the destination to `"none"`. Take note that in this case you will need to set the render method output parameter to either `"none"` or `"fragment"`
+
+Asyncronous Stencil Fetching
+--------------
+At times, when you a ton of templates on a single HTML page, loading times at the beginning can create quite a drag on your application. From version 15 onwards, asyncronous loading of stencils via URL can be done through the fetch API.
+```javascript
+    var myStencil = stencil.fetch("stencils/myStencil.stencil", "#optionalOutputDestination"); 
+```
+If an output destination is not specified, it will be defined with the `none` destination and can only be rendered with the `fragment` or `string` output methods.
 
 Cloning
 --------------
@@ -172,7 +182,8 @@ APIs
 ==========
 ```javascript
     stencil.build(?startElementID);
-    stencil.define(stencilID, ?outputDestination, ?elementType)
+    stencil.define(stencilID, ?outputDestination, ?outputElementType);
+    stencil.fetch(stencilURL, ?outputDestination); 
     myStencilObject.render(dataset, ?output);
     myStencilObject.clear();
 ```
