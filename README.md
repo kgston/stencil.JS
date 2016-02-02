@@ -40,7 +40,7 @@ If you want to limit auto build to a section of the page, just call:
 ```javascript
     var stencilCollection = stencil.build("elementIDToStartFrom");
 ```
-*Note that this method only supports stencil tags in default configuration.*
+*Note that this method only supports stencil tags in default configuration.* 
 
 If for some reason you are unable to insert stencil tags into the HTML code, due to HTML requirements e.g. outside `<tr>...</tr>` tags, you may wrap them in any tag that is valid, like `<tbody id="childStencilID">...</tbody>` and give it an ID. This only works for child stencils, so you will need to insert a parent stencil surrounding the child e.g. around the `<table>...</table>` tags and define the childStencils as an attribute of the immediate parent stencil using the attribute name "data-childStencil". Multiple values are delimited by spaces. This is an example on how to properly define a child stencil:
 
@@ -75,8 +75,9 @@ At times, when you a ton of templates on a single HTML page, loading times at th
 ```javascript
     var myStencil = stencil.fetch("stencils/myStencil.stencil", "#optionalOutputDestination"); 
 ```
-*Be warned that standard browser AJAX restrictions still applies.*
-If an output destination is not specified, it will be defined with the `none` destination and can only be rendered with the `"none"`, `"fragment"` or `"string"` output methods.
+*Be warned that standard browser AJAX restrictions still applies.* 
+
+If an output destination is not specified, it will be defined with the `"none"` destination and can only be rendered with the `"none"`, `"fragment"` or `"string"` output methods.
 
 Cloning
 --------------
