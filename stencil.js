@@ -50,7 +50,8 @@ stencil = $.extend(stencil || {}, (function() {
                     }
                     
                     var $template = $(this);
-                    var fetchedTemplate = stencil.define($template[0].id, destination || "none", null, $template);
+                    destination = destination || $template.attr("data-stencilDestination") || "none";
+                    var fetchedTemplate = stencil.define($template.attr("id"), destination, null, $template);
                     templatesList.push(fetchedTemplate);
                     fetchRequest.notify(fetchedTemplate);
                 });
@@ -333,6 +334,8 @@ stencil = $.extend(stencil || {}, (function() {
                 stencil.util.log("Stencil: Tag ID '" + tagID + "' provided is not found!");
                 return null;
             } else {
+                //Check for a specified destination defined in the stencil tag
+                if(destination == null) {destination = tagElem.attr("data-stencilDestination");}
                 //If a destination is not specified, insert the output after the template.
                 if(destination == null) {
                     destination = stencil.util.createWrapper(
