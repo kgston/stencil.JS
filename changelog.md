@@ -77,3 +77,4 @@ version 15
 -------------
 1. Uses $.extend to create namespace
 2. Added fetch functionality to retrieve and generate a stencil template via AJAX
+3. Added ability to specify the output destination in the stencil tag using the data-stencilDestination attribute
