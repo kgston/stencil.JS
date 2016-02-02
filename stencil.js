@@ -35,6 +35,8 @@ stencil = $.extend(stencil || {}, (function() {
                 dataType: "html",
                 timeout: stencil.opts.fetchTimeout
             }).done(function(response) {
+                //Sanitize HTML comments from the response
+                response = response.replace(/<!--((.|\n)*?)-->/gm, "");
                 var $templates = $(response);
                 if($templates.length === 0) {
                     stencil.util.log("Stencil: Unable to parse fetched template at <" + url + ">");
