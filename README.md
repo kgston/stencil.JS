@@ -27,8 +27,6 @@ Compilation
 There are 2 ways to "compile" the templates for use. You can manually define a stencil by calling:
 ```javascript
     var myStencil = stencil.define("stencilID"); 
-    //OR specify a jQuery style destination to automatically render to a one or more elements in the DOM
-    var myStencil = stencil.define("stencilID", "#optionalOutputDestination");
 ```
 and get back a stencil object OR
 
@@ -77,7 +75,8 @@ At times, when you a ton of templates on a single HTML page, loading times at th
 ```javascript
     var myStencil = stencil.fetch("stencils/myStencil.stencil", "#optionalOutputDestination"); 
 ```
-If an output destination is not specified, it will be defined with the `none` destination and can only be rendered with the `fragment` or `string` output methods.
+*Be warned that standard browser AJAX restrictions still applies.*
+If an output destination is not specified, it will be defined with the `none` destination and can only be rendered with the `"none"`, `"fragment"` or `"string"` output methods.
 
 Cloning
 --------------
