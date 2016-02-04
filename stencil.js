@@ -1,6 +1,6 @@
 /**
  * @preserve stencil.js
- * version 15 - 02 Feb 2015
+ * version 15.1 - 04 Feb 2015
  * Kingston Chan - Released under the MIT licence
  * https://github.com/kgston/stencil.JS
 */
@@ -38,17 +38,13 @@ stencil = $.extend(stencil || {}, (function() {
             }).done(function(response) {
                 //Sanitize HTML comments from the response
                 response = response.replace(/<!--((.|\n)*?)-->/gm, "");
-                var $templates = $(response);
+                var $templates = $(response).filter("stencil");
                 if($templates.length === 0) {
-                    stencil.util.log("Stencil: Unable to parse fetched template at <" + url + ">");
+                    stencil.util.log("Stencil: No stencils found at <" + url + ">");
                 }
                 
                 var templatesList = [];
                 $templates.each(function(index) {
-                    if(this.nodeName !== "STENCIL") {
-                        stencil.util.log("Stencil: Fetched template(" + (index + 1) + "/" + $templates.length + ") at <" + url + "> is not a stencil template");
-                    }
-                    
                     var $template = $(this);
                     destination = destination || $template.attr("data-stencilDestination") || "none";
                     var fetchedTemplate = stencil.define($template.attr("id"), destination, null, $template);
@@ -58,7 +54,7 @@ stencil = $.extend(stencil || {}, (function() {
                 fetchRequest.resolve(templatesList);
                 
             }).fail(function(jqXHR) {
-                stencil.util.log("Stencil: Failed to fetched template at <" + url + "> due to " + jqXHR.status + ":" + jqXHR.statusText);
+                stencil.util.log("Stencil: Failed to fetched template at <" + url + "> due to " + jqXHR.status + " - " + jqXHR.statusText);
             });
             
             return fetchRequest.promise();
@@ -309,7 +305,7 @@ stencil = $.extend(stencil || {}, (function() {
             var specificInners;
 
             //Return a existing stencil if already initialized because template is already removed once initalized
-            if(stencil.stencilHolder[tagID] != null) {
+            if(stencil.stencilHolder[tagID] != null && stencilFragment == null) {
                 var existingStencil = stencil.stencilHolder[tagID];
                 
                 //Replicate the existingStencil
