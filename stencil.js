@@ -4,7 +4,6 @@
  * Kingston Chan - Released under the MIT licence
  * https://github.com/kgston/stencil.JS
 */
-//# @preserve sourceMappingURL=stencil-15.0.min.map
 var stencil = stencil || {};
 stencil.opts = $.extend(stencil.opts || {}, function() {
     return {
