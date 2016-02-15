@@ -1,6 +1,6 @@
 /**
  * @preserve stencil.js
- * version 15.1 - 04 Feb 2015
+ * version 16 - 15 Feb 2015
  * Kingston Chan - Released under the MIT licence
  * https://github.com/kgston/stencil.JS
 */
@@ -367,30 +367,43 @@ stencil = $.extend(stencil || {}, (function() {
             }
             stencil.util.log("Stencil: Completed child stencil generation for " + tagID + ", " + 
                 Object.keys(childStencils).length + " child stencil");
+                
+            var buildChildStencils = function buildChildStencils($parentStencil) {
+                var childStencils = {};
+                
+                if($parentStencil.attr("data-childStencil") != null && $parentStencil.attr("data-childStencil") != "") {
+                    $parentStencil.attr("data-childStencil").split(" ").forEach(function(childStencilID) {
+                        if(childStencilID != "") {
+                            stencil.util.log("Stencil: Building specified child stencil: " + childStencilID);
+                            
+                            var $childTag = $parentStencil.find("#" + childStencilID);
+                            if(!$childTag.length) {
+                                stencil.util.log("Stencil: Specified child stencil: " + childStencilID + " not found!");
+                                return;
+                            }
+                            
+                            //Changed this from ID to class selector because when you replicate multiple copies of the parent 
+                            //stencil, it will cause issues with ID selector as there are multiple tags with the same ID
+                            //May consider removing innerTagID from ID to clean up
+                            //Use a GUID as a destination address to prevent mix up from tagID as it may be a stencil variable
+                            var newDestination = stencil.util.guid();
+                            $childTag.addClass(newDestination);
+                            var innerDestination = "." + newDestination; //Convert to JQuery class selector format
+                            
+                            var grandchildStencils = buildChildStencils($childTag);
+                            childStencils[childStencilID] = getStencil(childStencilID, innerDestination, $childTag.html());
+                            childStencils[childStencilID].childStencils = grandchildStencils;
+                            childStencils[childStencilID].isStandard = false;
+                            
+                            $childTag.empty();
+                        }
+                    });
+                }
+                return childStencils;
+            };
 
             //Check if there are any non standard specific child stencils
-            if(specificInners != null) {
-                specificInners.forEach(function(innerTagID) {
-                    stencil.util.log("Stencil: Building specified child stencil: " + innerTagID);
-                    var tag = stencilFragment.find("#" + stencil.util.escapeCSS(innerTagID));
-                    if(!tag.length) {
-                        stencil.util.log("Stencil: Specified child stencil: " + innerTagID + " not found!");
-                        return;
-                    }
-
-                    //Changed this from ID to class selector because when you replicate multiple copies of the parent 
-                    //stencil, it will cause issues with ID selector as there are multiple tags with the same ID
-                    //May consider removing innerTagID from ID to clean up
-                    //Use a GUID as a destination address to prevent mix up from tagID as it may be a stencil variable
-                    var newDestination = stencil.util.guid();
-                    tag.addClass(newDestination);
-                    var innerDestination = "." + newDestination; //Convert to JQuery class selector format
-                    
-                    childStencils[innerTagID] = getStencil(innerTagID, innerDestination, tag.html());
-                    childStencils[innerTagID].isStandard = false;
-                    tag.empty();
-                });
-            }
+            childStencils = $.extend(childStencils, buildChildStencils(stencilFragment));
 
             //Build the parentStencil
             var parentStencil = getStencil(tagID, destination, stencilFragment.html());

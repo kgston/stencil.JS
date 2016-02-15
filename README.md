@@ -1,9 +1,9 @@
 stencil.JS
 ==========
 ######*Javascript templating made easy*
-Version: 15.1
+Version: 16.0
 Author: Kingston Chan <kgston@hotmail.com>  
-Last modified: 04 Feb 2015  
+Last modified: 15 Feb 2015  
 
 Copyright (c) 2014-2016 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
 *Full legal text can be found in licence.txt*
@@ -160,7 +160,9 @@ If there was previously any content that was appended or prepended to, it will r
 Rendering Tricks
 --------------
 Rendering within a Table
-Due to HTML restirctions, certain tags are not allowed to become a child of certain tags. This is most obvious with HTML tables. When you insert stencil tags within the table, the stencil tags will get pushed out of the table on page load, so the library is not able to detect the location of the stencils correctly and its template. A workaround is to use the `specificChildStencilIDs` to define the wrapper element of the replicating contents, but take note of its own limitations
+Due to HTML restirctions, certain tags are not allowed to become a child of certain tags. This is most obvious with HTML tables. When you insert stencil tags within the table, the stencil tags will get pushed out of the table on page load, so the library is not able to detect the location of the stencils correctly and its template. 
+
+However, by using the data-childStencil attribute within the stencil tag or within a child tag that was previously declared in a parent data-childStencil attribute, the full functionality of nested child stencils becomes avaliable.
 
 Rendering conditionals
 --------------

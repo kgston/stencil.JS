@@ -82,3 +82,7 @@ version 15
 version 15.1
 -------------
 1. Added an additional filter for only selecting stencil objects when fetching a stencil
+
+version 16
+-------------
+1. Added functionality to allow for stencil tag defined childStencils to automatically recourse giving it full functionality of a  nested stencil tag

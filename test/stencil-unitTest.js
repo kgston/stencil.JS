@@ -454,8 +454,8 @@ QUnit.test("Nested Output & Selector Test", function(assert) {
         });
     }
     assert.ok(render.definedOutputRender.render(dataset), "Render output");
-    assert.ok($("#definedOutputRenderTest>div").prev().html().trim() === "Test content Head", "Check item above")
-    assert.ok($("#definedOutputRenderTest>div").next().html().trim() === "Test content Tail", "Check item below")
+    assert.ok($("#definedOutputRenderTest>div").prev().html().trim() === "Test content Head", "Check item above");
+    assert.ok($("#definedOutputRenderTest>div").next().html().trim() === "Test content Tail", "Check item below");
     assert.ok($("#definedOutputRenderTest>div>span").length === options.iterationCount, "Output validation for number of iterations");
     $("#definedOutputRenderTest>div>span").each(function(index) {
         assert.ok(this.innerHTML === dataset[index].contents, "Output validation for iteration " + index);
