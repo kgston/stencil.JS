@@ -7,7 +7,7 @@
 var stencil = stencil || {};
 stencil.opts = $.extend(stencil.opts || {}, function() {
     return {
-        debug: true,
+        debug: false,
         defaultOutputElement: "stencil-output",
         fetchTimeout: 3000,
         ieNs: ""
