@@ -1,6 +1,6 @@
 /**
  * @preserve stencil.js
- * version 16 - 15 Feb 2015
+ * version 16.1 - 16 Feb 2015
  * Kingston Chan - Released under the MIT licence
  * https://github.com/kgston/stencil.JS
 */
@@ -45,8 +45,8 @@ stencil = $.extend(stencil || {}, (function() {
                 var templatesList = [];
                 $templates.each(function(index) {
                     var $template = $(this);
-                    destination = destination || $template.attr("data-stencilDestination") || "none";
-                    var fetchedTemplate = stencil.define($template.attr("id"), destination, null, $template);
+                    var outputDestination = destination || $template.attr("data-stencilDestination") || "none";
+                    var fetchedTemplate = stencil.define($template.attr("id"), outputDestination, null, $template);
                     templatesList.push(fetchedTemplate);
                     fetchRequest.notify(fetchedTemplate);
                 });

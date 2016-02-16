@@ -86,3 +86,7 @@ version 15.1
 version 16
 -------------
 1. Added functionality to allow for stencil tag defined childStencils to automatically recourse giving it full functionality of a  nested stencil tag
+
+version 16.1
+-------------
+1. Fixed bug in the fetch API where the declared destination in the first stencil was overriding all the remaining stencil's destination
