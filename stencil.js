@@ -1,6 +1,6 @@
 /**
  * @preserve stencil.js
- * version 16.1 - 16 Feb 2015
+ * version 16.2 - 11 Mar 2015
  * Kingston Chan - Released under the MIT licence
  * https://github.com/kgston/stencil.JS
 */
