@@ -1,9 +1,9 @@
 stencil.JS
 ==========
 ######*Javascript templating made easy*
-Version: 16.0
+Version: 16.2
 Author: Kingston Chan <kgston@hotmail.com>  
-Last modified: 15 Feb 2015  
+Last modified: 11 Mar 2015  
 
 Copyright (c) 2014-2016 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
 *Full legal text can be found in licence.txt*
@@ -131,6 +131,21 @@ In order to use the selector to automatically select an option in a drop down me
 ***Where:***    
 ```javascript
     var JSON = {firstLevel:{secondLevel:"valueToSelect"}
+    template.render(JSON)
+```
+
+Image Tag Source
+--------------
+Putting in `{{variables}}` in src attributes of img tags was causing 404 errors when the templates were being initially displayed in the browser. In order to prevent such exceptions from being generated, the `data-stencilimgsrc` attribute can be used instead to dynamically populate the src attribute
+    `<img data-stencilimgsrc="firstLevel.secondLevel">...</select>`    
+***Where:***    
+```javascript
+    var JSON = {firstLevel:{secondLevel:"imgURL"}
+    template.render(JSON)
+```
+***Results:***  
+```html
+    <img src="imgURL"/>
 ```
 Rendering
 --------------

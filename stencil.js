@@ -53,6 +53,7 @@ stencil = $.extend(stencil || {}, (function() {
                 fetchRequest.resolve(templatesList);
                 
             }).fail(function(jqXHR) {
+                fetchRequest.reject();
                 stencil.util.log("Stencil: Failed to fetched template at <" + url + "> due to " + jqXHR.status + " - " + jqXHR.statusText);
             });
             
@@ -252,6 +253,13 @@ stencil = $.extend(stencil || {}, (function() {
                                 //Select the correct option as given in JSON dataset
                                 stencil.util.selectOption($(this), stencil.util.getKeyValue(param, selectionID));
                             });
+                            
+                            curDestElem.find("img[data-stencilimgsrc]").each(function() {
+                                //Get the imgSrc string to populate into the src attr
+                                var imgSrc = this.getAttribute("data-stencilimgsrc");
+                                this.setAttribute("src", stencil.util.getKeyValue(param, imgSrc));
+                                this.removeAttribute("data-stencilimgsrc");
+                            });
                         });
 
                         //If output option is prepend, put the data back in now
@@ -448,10 +456,11 @@ stencil = $.extend(stencil || {}, (function() {
                     if(this.value == valueToSelect) {
                         //Added selected attribute this way as jQuery clone option does not clone properties
                         //Creates issues when using the returned HTML code from render
-                        this.setAttribute("selected", ""); 
+                        this.setAttribute("selected", "");
                         return false;
                     }
                 });
+                selectElement.removeAttr("data-stencilselector");
             },
             //Returns the outerHTML of the given HTML element
             outerHTML: function (element) {

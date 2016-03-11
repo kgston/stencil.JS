@@ -90,3 +90,8 @@ version 16
 version 16.1
 -------------
 1. Fixed bug in the fetch API where the declared destination in the first stencil was overriding all the remaining stencil's destination
+
+version 16.2
+-------------
+1. Properly rejects all failed fetch requests
+2. Added data-stencilimgsrc attribute for all img tags to automatically insert a src URL dynamically as `{{}}` tags was causing 404 errors
