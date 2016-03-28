@@ -186,7 +186,7 @@ In order to nest child stencils, use the following syntax:
 ```
 
 In certain cases where `<stencil>` tags are not allowed to be nested in certain HTML tags such as `<table>` or `<select>`, you can make use of the `data-stencil-childs` attribute to define child stencils without the `<stencil>` tag and also supports recursion as shown in the rather complex example below:     
-*Note: lpIdx(Loop Index) and ctIdx(Counter Index) are special counters that are provided by the templating engine. They always start from 0 or 1 respectively for each stencil.*
+*Note: lpIdx(Loop Index) and ctIdx(Counter Index) are special counters that are provided by the templating engine. They always start from 0 or 1 respectively for each stencil.*  
 ***Where:***    
 ```javascript
     var template = stencil.define("template");
