@@ -36,7 +36,7 @@ Preparation
 First off, you should have your HTML code ready and identify all parts which should be iterated. Wrap the iterating area in `<stencil id="stencilID">...TemplateHTML...</stencil>` stencil tags and give it a stencil ID. The stencil ID will uniquely identify your stencil for later use. Also, feel free to nest stencil tags inside stencil tags. The engine will automatically identify them, just remember to give them unique IDs too!
 
 Compilation
---------------
+=============
 There are 2 ways to "compile" the templates for use. You can manually define a stencil by calling:
 ```javascript
     var myStencil = stencil.define("stencilID"); 
@@ -55,96 +55,11 @@ If you want to limit auto build to a section of the page, just call:
 ```
 *Note that this method only supports stencil tags in default configuration.* 
 
-If for some reason you are unable to insert stencil tags into the HTML code, due to HTML requirements e.g. outside `<tr>...</tr>` tags, you may wrap them in any tag that is valid, like `<tbody id="childStencilID">...</tbody>` and give it an ID. This only works for child stencils, so you will need to insert a parent stencil surrounding the child e.g. around the `<table>...</table>` tags and define the childStencils as an attribute of the immediate parent stencil using the attribute name "data-stencil-childs". Multiple values are delimited by spaces. This is an example on how to properly define a child stencil:
+If for some reason you are unable to insert stencil tags into the HTML code, due to HTML requirements e.g. outside `<tr>...</tr>` tags, you may wrap them in any tag that is valid, like `<tbody id="childStencilID">...</tbody>` and give it an ID. This only works for child stencils, so you will need to insert a parent stencil surrounding the child e.g. around the `<table>...</table>` tags and define the childStencils as an attribute of the immediate parent stencil using the attribute name "data-stencil-childs". Multiple values are delimited by spaces. See the section on child stencils for more information
 
-***Where:***    
-```javascript
-    var template = stencil.define("template");
-    var JSON = {
-        listsTitle: "My List",
-        primaryList: [{
-            item: "primary"
-        }, {
-            item: "primary"
-        }],
-        secondaryList: [{
-            "group{{ctIdx}}": [{
-                item: "secondary group 1"
-            }, {
-                item: "secondary group 1"
-            }]
-        }, {
-            "group{{ctIdx}}": [{
-                item: "secondary group 2"
-            }, {
-                item: "secondary group 2"
-            }]
-        }],
-        childLists: [{
-            "childList{{lpIdx}}": [{
-                item: "childList0"
-            }, {
-                item: "childList0"
-            }]
-        }, {
-            "childList{{lpIdx}}": [{
-                item: "childList1"
-            }, {
-                item: "childList1"
-            }]
-        }]
-    }
-    template.render(JSON);
-```
-
-***In:***  
-```html
-    <stencil id="template" data-stencil-childs="primaryList secondaryList">
-        <div>{{listsTitle}}</div>
-        <select id="primaryList">
-            <option>{{item}} - {{ctIdx}}</option>
-        </select>
-        <select id="secondaryList" data-stencil-childs="group{{ctIdx}}">
-            <optgroup id="group{{ctIdx}}" label="Group {{ctIdx}}">
-                <option>{{item}} - {{ctIdx}}</option>
-            </optgroup>
-        </select>
-        <stencil id="childLists" data-stencil-childs="childList{{lpIdx}}">
-            <select id="childList{{lpIdx}}">
-                <option>{{item}} - {{ctIdx}}</option>
-            </select>
-        </stencil>
-    </stencil>
-```
-
-***Results:***  
-```html
-    <div>My List</div>
-    <select id="primaryList">
-        <option>primary - 1</option>
-        <option>primary - 2</option>
-    </select>
-    <select id="secondaryList">
-        <option>secondary - 1</option>
-        <option>secondary - 2</option>
-    </select>
-    <select id="childList0">
-        <option>childList0 - 1</option>
-        <option>childList0 - 2</option>
-    </select>
-    <select id="childList1">
-        <option>childList1 - 1</option>
-        <option>childList1 - 2</option>
-    </select>
-```
-
-***The following style of defining childStencils has been __REMOVED__ since version 14 due it its limited functionality. Please use the above method to define childStencils*** 
-```javascript
-    var myStencil = stencil.define("parentStencilID", null, ["childStencilID1", "childStencilID2", ...]);
-```
 If you would like to specify an output location for the generated stencil, you can set it using the `data-stencil-destination` attribute in the stencil tag using the jQuery selector notation:
 ```html
-    <stencil id="attributeChildStencilRender" data-stencil-destination="#output .duplicates">
+    <stencil id="stencilID" data-stencil-destination="#output .duplicates">
         ...
     </stencil>
 ```
@@ -215,9 +130,47 @@ Cloning
 --------------
 By default, Stencil will remove your stencil template after "compilation". If you would like to create a new copy of the stencil with a separate output, just define the stencil manually in the first example and the engine will compile a deep copy of the existing stencil for you with a provided destination or a auto generated one. Auto generated outputs will always be exactly after the existing template. Do note that once a stencil structure has been defined, it is not possible to dynamically redefine it except for its output destination and output container. However, this feature may be included in a later version. 
 
+Rendering
+==============
+Once you have compiled the stencil and built your template, we can finally render the finalized stencil with the data inside it. Use the following command to generate the output:   
+```javascript
+    myStencil.render(JSON);
+```
+Where `JSON` is an array of objects. Each object should contain all the key value pairs for one stencil. Multiple objects in an array will generate multiple copies of the stencil with the respective objects in the order of insertion. If a key value is not found, the engine will leave the field blank and log to the console, if debug is on.
+
+Each stencil object is linked to an output location and does not change over the lifetime of the object. If you would want to hide and get a document fragment, not hide and get a document fragment, get a pure string output, append or prepend the generated stencil to the output, you can use the following syntax:
+```javascript
+    myStencil.render(JSON, "none");
+    myStencil.render(JSON, "fragment");
+    myStencil.render(JSON, "string");
+    myStencil.render(JSON, "append");
+    myStencil.render(JSON, "prepend");
+```
+
 Data Insertion
 --------------
-In order to map data from JSON into child stencils, use the following syntax:    
+In order to insert data into a stencil template    
+```javascript
+    var template = stencil.define("template");
+    var JSON = {
+        value: "foo"
+    };
+    template.render(JSON);
+```
+***In:***    
+```html
+    <stencil id="template">
+        <span>Value: {{value}}</span>
+    </stencil>
+```
+***Results:***  
+```html
+    <span>Value: foo</span>
+```
+
+Child stencils
+--------------
+In order to nest child stencils, use the following syntax:    
 ***Where:***    
 ```javascript
     var template = stencil.define("template");
@@ -239,6 +192,100 @@ In order to map data from JSON into child stencils, use the following syntax:
 ***Results:***  
 ```html
     <span>Child value: foo</span>
+```
+
+In certain cases where `<stencil>` tags are not allowed to be nested in certain HTML tags such as `<table>` or `<select>`, you can make use of the `data-stencil-childs` attribute to define child stencils without the `<stencil>` tag and also supports recursion as shown in the rather complex example below:     
+*Note: lpIdx(Loop Index) and ctIdx(Counter Index) are special counters that are provided by the templating engine. They always start from 0 or 1 respectively for each stencil.*
+***Where:***    
+```javascript
+    var template = stencil.define("template");
+    var JSON = {
+        listsTitle: "My List",
+        primaryList: [{
+            item: "primary"
+        }, {
+            item: "primary"
+        }],
+        secondaryList: [{
+            "group{{ctIdx}}": [{
+                item: "secondary group 1"
+            }, {
+                item: "secondary group 1"
+            }]
+        }, {
+            "group{{ctIdx}}": [{
+                item: "secondary group 2"
+            }, {
+                item: "secondary group 2"
+            }]
+        }],
+        childLists: [{
+            "childList{{lpIdx}}": [{
+                item: "childList0"
+            }, {
+                item: "childList0"
+            }]
+        }, {
+            "childList{{lpIdx}}": [{
+                item: "childList1"
+            }, {
+                item: "childList1"
+            }]
+        }]
+    }
+    template.render(JSON);
+```
+
+***In:***  
+```html
+    <stencil id="template" data-stencil-childs="primaryList secondaryList">
+        <div>{{listsTitle}}</div>
+        <select id="primaryList">
+            <option>{{item}} - {{ctIdx}}</option>
+        </select>
+        <select id="secondaryList" data-stencil-childs="group{{ctIdx}}">
+            <optgroup id="group{{ctIdx}}" label="Group {{ctIdx}}">
+                <option>{{item}} - {{ctIdx}}</option>
+            </optgroup>
+        </select>
+        <stencil id="childLists" data-stencil-childs="childList{{lpIdx}}">
+            <select id="childList{{lpIdx}}">
+                <option>{{item}} - {{ctIdx}}</option>
+            </select>
+        </stencil>
+    </stencil>
+```
+
+***Results:***  
+```html
+    <div>My List</div>
+    <select id="primaryList">
+        <option>primary - 1</option>
+        <option>primary - 2</option>
+    </select>
+    <select id="secondaryList">
+        <optgroup id="group1" label="Group 1">
+            <option>secondary group 1 - 1</option>
+            <option>secondary group 1 - 2</option>
+        </optgroup>
+        <optgroup id="group2" label="Group 2">
+            <option>secondary group 2 - 1</option>
+            <option>secondary group 2 - 2</option>
+        </optgroup>
+    </select>
+    <select id="childList0">
+        <option>childList0 - 1</option>
+        <option>childList0 - 2</option>
+    </select>
+    <select id="childList1">
+        <option>childList1 - 1</option>
+        <option>childList1 - 2</option>
+    </select>
+```
+
+***The following style of defining childStencils has been __REMOVED__ since version 14 due it its limited functionality. Please use the above method to define childStencils*** 
+```javascript
+    var myStencil = stencil.define("parentStencilID", null, ["childStencilID1", "childStencilID2", ...]);
 ```
 
 Replication
@@ -411,22 +458,6 @@ Putting in `{{variables}}` in src attributes of img tags was causing 404 errors 
 ***Results:***  
 ```html
     <img src="imgURL"/>
-```
-Rendering
---------------
-Once you have compiled the stencil and built your template, we can finally render the finalized stencil with the data inside it. Use the following command to generate the output:   
-```javascript
-    myStencil.render(JSON);
-```
-Where `JSON` is an array of objects. Each object should contain all the key value pairs for one stencil. Multiple objects in an array will generate multiple copies of the stencil with the respective objects in the order of insertion. If a key value is not found, the engine will leave the field blank and log to the console, if debug is on.
-
-Each stencil object is linked to an output location and does not change over the lifetime of the object. If you would want to hide and get a document fragment, not hide and get a document fragment, get a pure string output, append or prepend the generated stencil to the output, you can use the following syntax:
-```javascript
-    myStencil.render(JSON, "none");
-    myStencil.render(JSON, "fragment");
-    myStencil.render(JSON, "string");
-    myStencil.render(JSON, "append");
-    myStencil.render(JSON, "prepend");
 ```
 
 Clearing output
