@@ -47,5 +47,22 @@
         <div>Default HTML escaping</div>
         <div>{{default}}</div>
     </stencil>
+    
+    <stencil id="template" data-stencil-childs="primaryList secondaryList">
+        <div>{{listsTitle}}</div>
+        <select id="primaryList">
+            <option>{{item}} - {{ctIdx}}</option>
+        </select>
+        <select id="secondaryList" data-stencil-childs="group{{ctIdx}}">
+            <optgroup id="group{{ctIdx}}" label="Group {{ctIdx}}">
+                <option>{{item}} - {{ctIdx}}</option>
+            </optgroup>
+        </select>
+        <stencil id="childLists" data-stencil-childs="childList{{lpIdx}}">
+            <select id="childList{{lpIdx}}">
+                <option>{{item}} - {{ctIdx}}</option>
+            </select>
+        </stencil>
+    </stencil>
 </body>
 </html>

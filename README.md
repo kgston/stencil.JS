@@ -3,7 +3,7 @@ stencil.JS
 ######*Javascript templating made easy*
 Version: 17.0
 Author: Kingston Chan <kgston@hotmail.com>  
-Last modified: 25 Mar 2015  
+Last modified: 28 Mar 2015  
 
 Copyright (c) 2014-2016 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
 *Full legal text can be found in licence.txt*
@@ -55,21 +55,89 @@ If you want to limit auto build to a section of the page, just call:
 ```
 *Note that this method only supports stencil tags in default configuration.* 
 
-If for some reason you are unable to insert stencil tags into the HTML code, due to HTML requirements e.g. outside `<tr>...</tr>` tags, you may wrap them in any tag that is valid, like `<tbody id="childStencilID">...</tbody>` and give it an ID. This only works for child stencils, so you will need to insert a parent stencil surrounding the child e.g. around the `<table>...</table>` tags and define the childStencils as an attribute of the immediate parent stencil using the attribute name "data-childStencil". Multiple values are delimited by spaces. This is an example on how to properly define a child stencil:
+If for some reason you are unable to insert stencil tags into the HTML code, due to HTML requirements e.g. outside `<tr>...</tr>` tags, you may wrap them in any tag that is valid, like `<tbody id="childStencilID">...</tbody>` and give it an ID. This only works for child stencils, so you will need to insert a parent stencil surrounding the child e.g. around the `<table>...</table>` tags and define the childStencils as an attribute of the immediate parent stencil using the attribute name "data-stencil-childs". Multiple values are delimited by spaces. This is an example on how to properly define a child stencil:
 
+***Where:***    
+```javascript
+    var template = stencil.define("template");
+    var JSON = {
+        listsTitle: "My List",
+        primaryList: [{
+            item: "primary"
+        }, {
+            item: "primary"
+        }],
+        secondaryList: [{
+            "group{{ctIdx}}": [{
+                item: "secondary group 1"
+            }, {
+                item: "secondary group 1"
+            }]
+        }, {
+            "group{{ctIdx}}": [{
+                item: "secondary group 2"
+            }, {
+                item: "secondary group 2"
+            }]
+        }],
+        childLists: [{
+            "childList{{lpIdx}}": [{
+                item: "childList0"
+            }, {
+                item: "childList0"
+            }]
+        }, {
+            "childList{{lpIdx}}": [{
+                item: "childList1"
+            }, {
+                item: "childList1"
+            }]
+        }]
+    }
+    template.render(JSON);
+```
+
+***In:***  
 ```html
-    <stencil id="attributeChildStencilRender">
-        <div>{{content}} - {{lpIdx}}</div>
-        <stencil id="innerStencil" data-stencil-childs="ddl ddl{{lpIdx}}">
-            <select id="ddl">
-                <option>{{item}} - {{lpIdx}}</option>
-            </select>
-            <select id="ddl{{lpIdx}}">
+    <stencil id="template" data-stencil-childs="primaryList secondaryList">
+        <div>{{listsTitle}}</div>
+        <select id="primaryList">
+            <option>{{item}} - {{ctIdx}}</option>
+        </select>
+        <select id="secondaryList" data-stencil-childs="group{{ctIdx}}">
+            <optgroup id="group{{ctIdx}}" label="Group {{ctIdx}}">
+                <option>{{item}} - {{ctIdx}}</option>
+            </optgroup>
+        </select>
+        <stencil id="childLists" data-stencil-childs="childList{{lpIdx}}">
+            <select id="childList{{lpIdx}}">
                 <option>{{item}} - {{ctIdx}}</option>
             </select>
         </stencil>
     </stencil>
 ```
+
+***Results:***  
+```html
+    <div>My List</div>
+    <select id="primaryList">
+        <option>primary - 1</option>
+        <option>primary - 2</option>
+    </select>
+    <select id="secondaryList">
+        <option>secondary - 1</option>
+        <option>secondary - 2</option>
+    </select>
+    <select id="childList0">
+        <option>childList0 - 1</option>
+        <option>childList0 - 2</option>
+    </select>
+    <select id="childList1">
+        <option>childList1 - 1</option>
+        <option>childList1 - 2</option>
+    </select>
+```
+
 ***The following style of defining childStencils has been __REMOVED__ since version 14 due it its limited functionality. Please use the above method to define childStencils*** 
 ```javascript
     var myStencil = stencil.define("parentStencilID", null, ["childStencilID1", "childStencilID2", ...]);
@@ -91,13 +159,57 @@ If you do not need the output to be displayed in a specific location, you can se
 
 Asyncronous Stencil Fetching
 --------------
-At times, when you a ton of templates on a single HTML page, loading times at the beginning can create quite a drag on your application. From version 15 onwards, asyncronous loading of stencils via URL can be done through the fetch API.
+At times, when you a ton of templates on a single HTML page, loading times at the beginning can create quite a drag on your application. From version 15 onwards, asyncronous loading of stencils via URL can be done through the fetch API. The fetch API returns a jQuery promise with the following APIs:   
 ```javascript
-    var myStencil = stencil.fetch("stencils/myStencil.stencil", "#optionalOutputDestination"); 
+    promise.progress(forEachTemplateInFile(stencilObj));
+    promise.done(afterAllTemplatesHaveBeenDefined(aryOfStencilObjs));
+    promise.fail(ifTheFileFailsToLoad(jqXHR));
 ```
+***Where:***    
+```javascript
+    var myStencils = {};
+    //Returns a promise object
+    stencil.fetch("stencils/myStencils.stencil", "#optionalOutputDestination")
+        .progress(function(template) {
+            //Save each template into an object for later use
+            myStencils[template.tagID] = template;
+        })
+        .done(function(templateAry) {
+            //templateAry.length == 2
+            //All templates have been loaded, trigger some other callback
+            callNextStep();
+        })
+        .fail(function(jqXHR) {
+            //Error handling goes here
+        });
+    
+    function callNextStep() {
+        myStencils.foo.render({value: "Fighters"})
+        myStencils.bar.render({value: "Dot"}, "append")
+    }
+```
+***In:***  
+You have a separate HTML file called myStencils.stencil in a folder called stencils   
+*stencils/myStencils.stencil*
+```html
+    <stencil id="foo">
+        <span>Foo: {{value}}</span>
+    </stencil>
+    <stencil id="bar">
+        <span>Bar: {{value}}</span>
+    </stencil>
+```
+***Results:***  
+```html
+    <div id="optionalOutputDestination">
+        <span>Foo: Fighters</span>
+        <span>Bar: Dot</span>
+    </div>
+```
+
 *Be warned that standard browser AJAX restrictions still applies.* 
 
-If an output destination is not specified, it will be defined with the `"none"` destination and can only be rendered with the `"none"`, `"fragment"` or `"string"` output methods.
+If an output destination is not specified (either through the fetch API or via the data-stencil-destination attribute), it will be defined with the `"none"` destination and can only be rendered with the `"none"`, `"fragment"` or `"string"` output methods.
 
 Cloning
 --------------
@@ -105,39 +217,148 @@ By default, Stencil will remove your stencil template after "compilation". If yo
 
 Data Insertion
 --------------
-In order to map data from JSON into child stencils, use the following syntax:
-    `{{firstLevel}}`    
+In order to map data from JSON into child stencils, use the following syntax:    
 ***Where:***    
 ```javascript
-    var JSON = {childStencilID:{firstLevel:"value"}}
+    var template = stencil.define("template");
+    var JSON = {
+        child: {
+            value: "foo"
+        }
+    };
+    template.render(JSON);
+```
+***In:***    
+```html
+    <stencil id="template">
+        <stencil id="child">
+            <span>Child value: {{value}}</span>
+        </stencil>
+    </stencil>
+```
+***Results:***  
+```html
+    <span>Child value: foo</span>
+```
+
+Replication
+--------------
+In order to map data from JSON into child stencils, use the following syntax:    
+***Where:***    
+```javascript
+    var template = stencil.define("template");
+    var JSON = [{
+        parentKey: "alpha",
+        child: [{
+            value: "alpha - foo"
+        }, {
+            value: "alpha - bar"
+        }]
+    }, {
+        parentKey: "beta",
+        child: [{
+            value: "beta - foo"
+        }, {
+            value: "beta - bar"
+        }]
+    }];
+    template.render(JSON);
+```
+***In:***    
+```html
+    <stencil id="template">
+        <span>Parent: {{parentKey}}</span>
+        <stencil id="child">
+            <span>Child: {{value}}</span>
+        </stencil>
+    </stencil>
+```
+***Results:***  
+```html
+    <span>Parent: alpha</span>
+    <span>Child: alpha - foo</span>
+    <span>Child: alpha - bar</span>
+    <span>Parent: beta</span>
+    <span>Child: beta - foo</span>
+    <span>Child: beta - bar</span>
 ```
 
 Deep object retrival notation
 --------------
-In order to map data from the JSON object into the stencil, use the following syntax anywhere within your template code:
-    `{{firstLevel[secondLevel].thirdLevel[1]}}`   
+In order to map data from the JSON object into the stencil, use the following syntax anywhere within your template code:    
 ***Where:***    
 ```javascript
-    var JSON = {firstLevel:{secondLevel:{thirdLevel:["foo", "value", "bar"]}}};
+    var template = stencil.define("template");
+    var JSON = {
+        firstLevel: {
+            secondLevel: {
+                thirdLevel: ["foo", "bar", "cat"]
+            }
+        }
+    };
+    template.render(JSON);
+```
+***In:***    
+```html
+    <stencil id="template">
+        <span>Deep value: {{firstLevel[secondLevel].thirdLevel[1]}}</span>
+    </stencil>
+```
+***Results:***  
+```html
+    <span>Deep value: bar</span>
 ```
 
 Nested key generation
 --------------
-Stencil also supports nested keys, allowing runtime determination of the final JSON data to be used. For example:
-    `{{foo{{index}}{{alphaIndex}}}}` will result in a final key of `{{foo1b}}`   
+Stencil also supports nested keys, allowing runtime determination of the final JSON data to be used. For example:    
 ***Where:***     
 ```javascript
-    var JSON = {foo1b: "valueToBeInserted", index: 1, alphaIndex: b}
+    var template = stencil.define("template");
+    var JSON = {foo1b: "valueToBeInserted", index: 1, alphaIndex: b};
+    template.render(JSON);
 ```
-All nested keys will be generated 
+***In:***    
+```html
+    <stencil id="template">
+        <span>Nested value: {{foo{{index}}{{alphaIndex}}}}</span>
+    </stencil>
+```
+***Results:***  
+```html
+    <span>Nested value: valueToBeInserted</span>
+```
 
 Global data objects
 --------------
-By default, a child stencil will not have access to its parents dataset and while a parent has access to its child dataset, retrieval from an array is currently not supported. However there may be cases where you have data that needs access by parent and child stencils. For such cases you can utilized the reserved `global` key to store objects that  needs to be propagated to all stencils. For example,
-    `{{global.foo}}`    
+By default, a child stencil will not have access to its parents dataset and while a parent has access to its child dataset, retrieval from an array is currently not supported. However there may be cases where you have data that needs access by parent and child stencils. For such cases you can utilized the reserved `global` key to store objects that needs to be propagated to all stencils.   
 ***Where:***    
 ```javascript 
-    var JSON = {global: {foo: "accessableByAllStencils"}, bar: "accessableOnlyByParticularStencil"}
+    var template = stencil.define("template");
+    var JSON = {
+        global: {foo: "accessableByAllStencils"}, 
+        bar: "accessableOnlyByLocalStencil",
+        child: {}
+    };
+    template.render(JSON);
+```
+***In:***    
+```html
+    <stencil id="template">
+        <span>Gloabl: {{global.foobar}}</span>
+        <span>Local: {{bar}}</span>
+        <stencil id="child">
+            <span>Gloabl: {{global.foo}}</span>
+            <span>Parent: {{bar}}</span>
+        </stenci>
+    </stencil>
+```
+***Results:***  
+```html
+    <span>Gloabl: accessableByAllStencils</span>
+    <span>Local: accessableOnlyByLocalStencil</span>
+    <span>Gloabl: accessableByAllStencils</span>
+    <span>Parent: </span> //No output due to undefined variable
 ```
 
 Special variables
@@ -146,22 +367,46 @@ For templating convienence, you can use the special variables lpIdx and ctIdx fo
 
 Selector
 --------------
-In order to use the selector to automatically select an option in a drop down menu, set an attribute called `data-stencilselector` (to conform to HTML5 specs) to the select elements:
-    `<select data-stencil-selector="firstLevel.secondLevel">...</select>`    
+In order to use the selector to automatically select an option in a drop down menu, set an attribute called `data-stencilselector` (to conform to HTML5 specs) to the select elements:   
 ***Where:***    
 ```javascript
-    var JSON = {firstLevel:{secondLevel:"valueToSelect"}
-    template.render(JSON)
+    var template = stencil.define("template");
+    var JSON = {firstLevel:{secondLevel:"bar"};
+    template.render(JSON);
+```
+***In:***    
+```html
+    <stencil id="template">
+        <select data-stencil-selector="firstLevel.secondLevel">
+            <option value="foo">foo</option>
+            <option value="bar">bar</option>
+            <option value="cat">cat</option>
+        </select>
+    </stencil>
+```
+***Results:***  
+```html
+    <select>
+        <option value="foo">foo</option>
+        <option value="bar" selected>bar</option>
+        <option value="cat">cat</option>
+    </select>
 ```
 
 Image Tag Source
 --------------
-Putting in `{{variables}}` in src attributes of img tags was causing 404 errors when the templates were being initially displayed in the browser. In order to prevent such exceptions from being generated, the `data-stencil-imgsrc` attribute can be used instead to dynamically populate the src attribute
-    `<img data-stencil-imgsrc="firstLevel.secondLevel">...</select>`    
+Putting in `{{variables}}` in src attributes of img tags was causing 404 errors when the templates were being initially displayed in the browser. In order to prevent such exceptions from being generated, the `data-stencil-imgsrc` attribute can be used instead to dynamically populate the src attribute   
 ***Where:***    
 ```javascript
-    var JSON = {firstLevel:{secondLevel:"imgURL"}
-    template.render(JSON)
+    var template = stencil.define("template");
+    var JSON = {firstLevel:{secondLevel:"imgURL"};
+    template.render(JSON);
+```
+***In:***    
+```html
+    <stencil id="template">
+        <img data-stencil-imgsrc="firstLevel.secondLevel">...</img>
+    </stencil>
 ```
 ***Results:***  
 ```html
