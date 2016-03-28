@@ -1,6 +1,6 @@
 /**
  * @preserve stencil.js
- * version 16.2 - 11 Mar 2015
+ * version 17.0 - 28 Mar 2015
  * Kingston Chan - Released under the MIT licence
  * https://github.com/kgston/stencil.JS
 */
@@ -9,25 +9,37 @@ stencil.opts = $.extend(stencil.opts || {}, function() {
     return {
         debug: false,
         defaultOutputElement: "stencil-output",
-        fetchTimeout: 3000,
+        fetchTimeout: 30000,
         ieNs: ""
     };
-}());
+} ());
+stencil.flags = $.extend(stencil.flags || {}, function() {
+    return {
+        escapeHtml: true
+    };
+} ());
+stencil.attributes = $.extend(stencil.attributes || {}, function() {
+    return {
+        destination: "data-stencil-destination",
+        childStencils: "data-stencil-childs",
+        selector: "data-stencil-selector",
+        imgsrc: "data-stencil-imgsrc"
+    };
+} ());
 stencil = $.extend(stencil || {}, (function() {
-    return { 
+    return {
         stencilHolder: {},
         /*
-            Fetches a new stencil asyncronously via AJAX through a valid URL. The response should comprise of only 1 or more stencil templates without any HTML comments on the root level.
-            
+            Fetches a new stencil asyncronously via AJAX through a valid URL. The response should comprise of 1 or more stencil templates.
             Returns a jQuery promise. Set a callback to the progress event to get a stencil object one by one in order defined in the response or to the done event to get a array of all stencil objects.
         */
         //url - String
         fetch: function(url, destination) {
-            if(url == null) {
+            if (url == null) {
                 stencil.util.log("Stencil: No valid URL was passed in");
                 return;
             }
-            
+
             var fetchRequest = $.Deferred();
             $.ajax({
                 url: url,
@@ -38,25 +50,25 @@ stencil = $.extend(stencil || {}, (function() {
                 //Sanitize HTML comments from the response
                 response = response.replace(/<!--((.|\n)*?)-->/gm, "");
                 var $templates = $(response).filter("stencil");
-                if($templates.length === 0) {
+                if ($templates.length === 0) {
                     stencil.util.log("Stencil: No stencils found at <" + url + ">");
                 }
-                
+
                 var templatesList = [];
                 $templates.each(function(index) {
                     var $template = $(this);
-                    var outputDestination = destination || $template.attr("data-stencilDestination") || "none";
+                    var outputDestination = destination || $template.attr(stencil.attributes.destination) || "none";
                     var fetchedTemplate = stencil.define($template.attr("id"), outputDestination, null, $template);
                     templatesList.push(fetchedTemplate);
                     fetchRequest.notify(fetchedTemplate);
                 });
                 fetchRequest.resolve(templatesList);
-                
+
             }).fail(function(jqXHR) {
-                fetchRequest.reject();
+                fetchRequest.reject(jqXHR);
                 stencil.util.log("Stencil: Failed to fetched template at <" + url + "> due to " + jqXHR.status + " - " + jqXHR.statusText);
             });
-            
+
             return fetchRequest.promise();
         },
         /*
@@ -67,9 +79,9 @@ stencil = $.extend(stencil || {}, (function() {
             and optional finalOutputElementType where you can specify a type of element container to hold your output
             <stencil> tags
         */
-        
+
         //Element ID - String, optional?Element class - String, optional?Element type - String, private! jQueryFragment
-        define: function (tagID, destination, finalOutputElementType, stencilFragment) {
+        define: function(tagID, destination, finalOutputElementType, stencilFragment) {
             //Builds a Stencil object and returns the created instance
             //Private method, for internal use only
             var getStencil = function(tagID, destination, template) {
@@ -88,15 +100,15 @@ stencil = $.extend(stencil || {}, (function() {
                     getChild: function(childID) {
                         var currentChildStencils = this.childStencils;
                         var found = null;
-                        if(Object.keys(currentChildStencils).length === 0) {
+                        if (Object.keys(currentChildStencils).length === 0) {
                             return null;
                         }
-                        if(Object.keys(currentChildStencils).indexOf(childID) >= 0) {
+                        if (Object.keys(currentChildStencils).indexOf(childID) >= 0) {
                             found = currentChildStencils[childID];
                         } else {
                             Object.keys(currentChildStencils).every(function(childStencil) {
                                 var result = currentChildStencils[childStencil].getChild(childID);
-                                if(result == null) {
+                                if (result == null) {
                                     return true;
                                 } else {
                                     found = result;
@@ -119,33 +131,33 @@ stencil = $.extend(stencil || {}, (function() {
                     //Private parentElem for internal use only. Used to determine its parent during recursive calls and
                     //also used to determine if its is the first stencil being called.
                     //JSON dataset - Array[Objects], optional?output - String, private!parentElem - Element]
-                    render: function (dataset, output, parentElem) {
+                    render: function(dataset, output, parentElem) {
                         //Check for errors in the dataset and return false early if there is no data
                         if (!(Array.isArray(dataset))) {
-                            if(stencil.util.isObject(dataset)) {
+                            if (stencil.util.isObject(dataset)) {
                                 dataset = [dataset];
-                            } else if(typeof dataset === "undefined") {
+                            } else if (typeof dataset === "undefined") {
                                 stencil.util.log("Stencil - " + this.tagID + ": has no data, skipping...");
                                 return false;
                             } else {
                                 stencil.util.log("Stencil - " + this.tagID + ": dataset in an invalid format, detected: " + typeof dataset);
                                 return false;
                             }
-                        } else if(dataset == null || dataset.length === 0) {
+                        } else if (dataset == null || dataset.length === 0) {
                             stencil.util.log("Stencil - " + this.tagID + ": was not passed in data");
                             return false;
                         }
-                        
+
                         //Init all used variables
-                        var destination = this.destination; 
+                        var destination = this.destination;
                         var isDetached = false;
                         var destinationElem;
                         //If this is the starting stencil
-                        if(parentElem == null) {
+                        if (parentElem == null) {
                             //Search for the destination DOM and get its parent
                             parentElem = $(destination);
-                            if(destination === "none" || output === "none" || output === "string" || output === "fragment") {
-                                if(output === "none" || output === "string" || output === "fragment") {
+                            if (destination === "none" || output === "none" || output === "string" || output === "fragment") {
+                                if (output === "none" || output === "string" || output === "fragment") {
                                     destinationElem = $(document.createElement('div'));
                                 } else {
                                     stencil.util.log("Stencil: Only render output type \"none\", \"fragment\" or \"string\" is supported for stencils with no destination");
@@ -172,9 +184,9 @@ stencil = $.extend(stencil || {}, (function() {
                         var isStandard = this.isStandard;
 
                         //If destination is valid...
-                        if(destinationElem.length) {
+                        if (destinationElem.length) {
                             //And if output === ...
-                            if(output === "append" || output === "prepend") {
+                            if (output === "append" || output === "prepend") {
                                 //Copy contents for appending after template generation and empty 
                                 this.existingContent = destinationElem.html();
                                 destinationElem.empty();
@@ -182,7 +194,7 @@ stencil = $.extend(stencil || {}, (function() {
                                 //None behaviour is to empty the output and return the fragement
                                 parentElem.empty();
                                 destinationElem.empty();
-                            } else if(output === "string" || output === "fragment") {
+                            } else if (output === "string" || output === "fragment") {
                                 //Else Fragment or String behaviour is to leave the output alone and return the fragement
                             } else {
                                 destinationElem.empty();
@@ -194,28 +206,29 @@ stencil = $.extend(stencil || {}, (function() {
                         }
 
                         //For each set of Object | 1 Object = 1 template generated
-                        dataset.forEach(function (param, loopIdx) {
+                        dataset.forEach(function(param, loopIdx) {
                             //Insert data into placeholder
                             param.lpIdx = loopIdx; //Special key for loop index
                             param.ctIdx = loopIdx + 1; //Special key for counter index
                             var curOutput = template;
 
                             //Search through whole doc for {{*}} items
-                            while (curOutput.search(/\{\{[\w.]*\}\}/) >= 0) {
+                            var variableRegex = /\{\{[\w.\[\]/]*\}\}/;
+                            while (curOutput.search(variableRegex) >= 0) {
                                 //Get the key
-                                var keyString = curOutput.match(/\{\{[\w.]*\}\}/)[0];
-                                var key = keyString.substring(2, keyString.length - 2);
-                                var paramValue = stencil.util.getKeyValue(param, key);
+                                var keyString = curOutput.match(variableRegex)[0];
+                                var keyParts = stencil.util.getKeyParts(keyString);
+                                var paramValue = stencil.util.getKeyValue(param, keyParts);
                                 //Replace the value
-                                paramValue = (paramValue == null)? "" : paramValue;
-                                curOutput = curOutput.replace("{{" + key + "}}", paramValue);
+                                if(paramValue == null) paramValue = ""; //Prevent 0 issue
+                                curOutput = curOutput.replace(keyString, paramValue);
                             }
 
                             var curDestElem = destinationElem; //Copy of destination
                             //If template is not a child stencil...
-                            if(isStandard) {
+                            if (isStandard) {
                                 //Create a wrapper for this iteration and insert it as a child of the destination
-                                var wrapperGuid = stencil.util.createWrapper(destinationElem, "stencil-replicator", "append") ;
+                                var wrapperGuid = stencil.util.createWrapper(destinationElem, "stencil-replicator", "append");
                                 curDestElem = destinationElem.find(wrapperGuid); //Set output to this iteration wrapper
                             }
 
@@ -223,17 +236,17 @@ stencil = $.extend(stencil || {}, (function() {
                             curDestElem.append(curOutput);
 
                             //Remove the GUID class that is used as a destination for non standard child stencils
-                            if(!isStandard) {
+                            if (!isStandard) {
                                 curDestElem.removeClass(destination.replace(".", ""));
                             }
-                            
+
                             //If childStencils has stencils, render those after the parentStencil has been drawn
                             Object.keys(childStencils).forEach(function(key) {
                                 //Copy global params into next param set
                                 var nextParamSet = param[key];
-                                if(param.global != null) {
+                                if (param.global != null) {
                                     //Check if the param set is an array or an object and allocate accordingly
-                                    if(Array.isArray(nextParamSet)) {
+                                    if (Array.isArray(nextParamSet)) {
                                         nextParamSet.forEach(function(obj) {
                                             obj.global = param.global;
                                         });
@@ -245,46 +258,47 @@ stencil = $.extend(stencil || {}, (function() {
                                 childStencils[key].render(nextParamSet, null, curDestElem);
                             });
 
-                            //Render selectors after child stencils has been rendered as selection values may be generated 
-                            //in a child stencil
-                            curDestElem.find("select[data-stencilselector]").each(function() {
+                            //Render post options after child stencils has been rendered as option values may be generated in a child stencil
+                            curDestElem.find("select[" + stencil.attributes.selector + "]").each(function() {
                                 //Get the selectionID to get the correct data
-                                var selectionID = this.getAttribute("data-stencilselector");
+                                var selectionID = this.getAttribute(stencil.attributes.selector);
+                                var keyParts = stencil.util.getKeyParts(selectionID);
                                 //Select the correct option as given in JSON dataset
-                                stencil.util.selectOption($(this), stencil.util.getKeyValue(param, selectionID));
+                                stencil.util.selectOption($(this), stencil.util.getKeyValue(param, keyParts));
                             });
-                            
-                            curDestElem.find("img[data-stencilimgsrc]").each(function() {
-                                //Get the imgSrc string to populate into the src attr
-                                var imgSrc = this.getAttribute("data-stencilimgsrc");
-                                this.setAttribute("src", stencil.util.getKeyValue(param, imgSrc));
-                                this.removeAttribute("data-stencilimgsrc");
+
+                            curDestElem.find("img[" + stencil.attributes.imgsrc + "]").each(function() {
+                                //Get the imgSrc string to populate into the src attr and add the /noEsc flag to prevent / from getting escaped
+                                var imgSrc = this.getAttribute(stencil.attributes.imgsrc) + "/noEsc";
+                                var keyParts = stencil.util.getKeyParts(imgSrc);
+                                this.setAttribute("src", stencil.util.getKeyValue(param, keyParts));
+                                this.removeAttribute(stencil.attributes.imgsrc);
                             });
                         });
 
                         //If output option is prepend, put the data back in now
-                        if(output === "prepend") {
+                        if (output === "prepend") {
                             destinationElem.append(this.existingContent);
                         }
 
                         //Attached detached first stencil back into page after rendering everything
                         //Unless user does not need it to be displayed
-                        if(isDetached) {
+                        if (isDetached) {
                             //Clean up all stencil related tags and convert outermost stencil-output tag to div
                             //This is to reduce DOM clutter and conform to W3C HTML standards (the stencil-output tag still
                             //does not conform, but you can change that under stencil.opts.defaultOutputElement or set
                             //it during define as the 4th parameter)
                             //if(!stencil.opts.debug) {
-                                stencil.util.cleanUpStencils(destinationElem);
+                            stencil.util.cleanUpStencils(destinationElem);
                             //}
-                            
+
                             //If output === "none", return output node to user
-                            if(output === "none" || output === "fragment") {
+                            if (output === "none" || output === "fragment") {
                                 //parentElem.replaceWith(destinationElem.clone().empty()); Depreciated as data is already cleared in the beginning
                                 return destinationElem.children();
-                            } else if(output === "string") {
+                            } else if (output === "string") {
                                 return destinationElem.html();
-                            } else if(output !== "append") {
+                            } else if (output !== "append") {
                                 //Empty the output container first if its not appending
                                 parentElem.empty();
                             }
@@ -312,55 +326,56 @@ stencil = $.extend(stencil || {}, (function() {
             var specificInners;
 
             //Return a existing stencil if already initialized because template is already removed once initalized
-            if(stencil.stencilHolder[tagID] != null && stencilFragment == null) {
+            if (stencil.stencilHolder[tagID] != null && stencilFragment == null) {
                 var existingStencil = stencil.stencilHolder[tagID];
-                
+
                 //Replicate the existingStencil
                 var newStencil = clone(existingStencil);
 
                 //If there is no destination, create a new wrapper and save it as local destination
-                if(destination == null) {
+                if (destination == null) {
                     destination = stencil.util
-                    .createWrapper(
-                        $(existingStencil.destination), 
-                        finalOutputElementType || stencil.opts.defaultOutputElement, 
+                        .createWrapper(
+                        $(existingStencil.destination),
+                        finalOutputElementType || stencil.opts.defaultOutputElement,
                         "after");
                 }
                 //Set the local destination as the template destination, either from above code or user defined destination
                 newStencil.destination = destination;
                 return newStencil;
             }
-            
+
             //If no stencilFragment specified, get html from tagID
             var tagElem = stencilFragment || $("#" + stencil.util.escapeCSS(tagID));
-            if(!tagElem.length) {
+            if (!tagElem.length) {
                 stencil.util.log("Stencil: Tag ID '" + tagID + "' provided is not found!");
                 return null;
             } else {
                 //Check for a specified destination defined in the stencil tag
-                if(destination == null) {destination = tagElem.attr("data-stencilDestination");}
+                if (destination == null) { destination = tagElem.attr(stencil.attributes.destination); }
                 //If a destination is not specified, insert the output after the template.
-                if(destination == null) {
+                if (destination == null) {
                     destination = stencil.util.createWrapper(
-                        tagElem, 
+                        tagElem,
                         finalOutputElementType || stencil.opts.defaultOutputElement,
                         "after");
                 }
                 stencilFragment = tagElem.detach();
             }
 
-            //Check if data-childStencil attribute exists and set it into the specific inners array
-            if(stencilFragment.attr("data-childStencil") != null && stencilFragment.attr("data-childStencil") != "") {
-                if(specificInners == null) {
+            //Check if childStencil attribute exists and set it into the specific inners array
+            var stencilChildAttr = stencilFragment.attr(stencil.attributes.childStencils);
+            if (stencilChildAttr != null && stencilChildAttr != "") {
+                if (specificInners == null) {
                     specificInners = [];
                 }
-                stencilFragment.attr("data-childStencil").split(" ").forEach(function(childStencilID) {
-                    if(childStencilID != "") {
+                stencilChildAttr.split(" ").forEach(function(childStencilID) {
+                    if (childStencilID != "") {
                         specificInners.push(childStencilID);
                     }
                 });
             }
-            
+
             //Otherwise build a new stencil
             var childStencils = {};
 
@@ -369,26 +384,27 @@ stencil = $.extend(stencil || {}, (function() {
 
             //If there are more descendent stencil tags, recursively define them 
             //and attach them as child of their parents
-            if(stencilFragment.find("stencil").length !== 0) {
+            if (stencilFragment.find("stencil").length !== 0) {
                 childStencils = stencil.util.findStencils(stencilFragment);
             }
-            stencil.util.log("Stencil: Completed child stencil generation for " + tagID + ", " + 
+            stencil.util.log("Stencil: Completed child stencil generation for " + tagID + ", " +
                 Object.keys(childStencils).length + " child stencil");
-                
+
             var buildChildStencils = function buildChildStencils($parentStencil) {
                 var childStencils = {};
                 
-                if($parentStencil.attr("data-childStencil") != null && $parentStencil.attr("data-childStencil") != "") {
-                    $parentStencil.attr("data-childStencil").split(" ").forEach(function(childStencilID) {
-                        if(childStencilID != "") {
+                var parentChildAttr = $parentStencil.attr(stencil.attributes.childStencils);
+                if (parentChildAttr != null && parentChildAttr != "") {
+                    parentChildAttr.split(" ").forEach(function(childStencilID) {
+                        if (childStencilID != "") {
                             stencil.util.log("Stencil: Building specified child stencil: " + childStencilID);
-                            
-                            var $childTag = $parentStencil.find("#" + childStencilID);
-                            if(!$childTag.length) {
+
+                            var $childTag = $parentStencil.find("#" + stencil.util.escapeCSS(childStencilID));
+                            if (!$childTag.length) {
                                 stencil.util.log("Stencil: Specified child stencil: " + childStencilID + " not found!");
                                 return;
                             }
-                            
+
                             //Changed this from ID to class selector because when you replicate multiple copies of the parent 
                             //stencil, it will cause issues with ID selector as there are multiple tags with the same ID
                             //May consider removing innerTagID from ID to clean up
@@ -396,12 +412,12 @@ stencil = $.extend(stencil || {}, (function() {
                             var newDestination = stencil.util.guid();
                             $childTag.addClass(newDestination);
                             var innerDestination = "." + newDestination; //Convert to JQuery class selector format
-                            
+
                             var grandchildStencils = buildChildStencils($childTag);
                             childStencils[childStencilID] = getStencil(childStencilID, innerDestination, $childTag.html());
                             childStencils[childStencilID].childStencils = grandchildStencils;
                             childStencils[childStencilID].isStandard = false;
-                            
+
                             $childTag.empty();
                         }
                     });
@@ -416,11 +432,11 @@ stencil = $.extend(stencil || {}, (function() {
             var parentStencil = getStencil(tagID, destination, stencilFragment.html());
             //Set all the child stencils built earlier
             parentStencil.childStencils = childStencils;
-            
+
             //Remove the stencil template
             //Only can remove at the end because it needs to build the childStencils first before removing
             //stencilFragment.remove(); 
-            
+
             //Save to the holder before returning stencil object
             stencil.stencilHolder[tagID] = parentStencil;
             return parentStencil;
@@ -428,8 +444,8 @@ stencil = $.extend(stencil || {}, (function() {
         //Auto compile function to scan entire page for stencil templates
         //Returns an object of tagID & stencil object pairs
         build: function(startElementID) {
-            startElementID = (startElementID == null)? $("body"): $("#" + startElementID);
-            if(startElementID.length === 0) {
+            startElementID = (startElementID == null) ? $("body") : $("#" + startElementID);
+            if (startElementID.length === 0) {
                 stencil.util.log("Stencil: Unable to start build process as starting element ID cannot be found");
                 return null;
             }
@@ -437,33 +453,33 @@ stencil = $.extend(stencil || {}, (function() {
         },
         util: {
             //Creates a new GUID
-            guid: function () {
+            guid: function() {
                 //Retrieved from http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
                 var d = new Date().getTime();
-                if(window.performance && typeof window.performance.now === "function"){
+                if (window.performance && typeof window.performance.now === "function") {
                     d += performance.now(); //use high-precision timer if available
                 }
                 var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                    var r = (d + Math.random()*16)%16 | 0;
-                    d = Math.floor(d/16);
-                    return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+                    var r = (d + Math.random() * 16) % 16 | 0;
+                    d = Math.floor(d / 16);
+                    return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
                 });
                 return "stencil-" + uuid;
             },
             //Selects the given value in the drop down box for the given select element 
             selectOption: function(selectElement, valueToSelect) {
                 selectElement.children().each(function() {
-                    if(this.value == valueToSelect) {
+                    if (this.value == valueToSelect) {
                         //Added selected attribute this way as jQuery clone option does not clone properties
                         //Creates issues when using the returned HTML code from render
                         this.setAttribute("selected", "");
                         return false;
                     }
                 });
-                selectElement.removeAttr("data-stencilselector");
+                selectElement.removeAttr(stencil.attributes.selector);
             },
             //Returns the outerHTML of the given HTML element
-            outerHTML: function (element) {
+            outerHTML: function(element) {
                 return element.clone().wrap('<p>').parent().html();
             },
             //Create a new wrapper HTML after the element provided of the given wrapperName
@@ -473,16 +489,16 @@ stencil = $.extend(stencil || {}, (function() {
             createWrapper: function(locationElement, wrapperName, creationType) {
                 var classID = stencil.util.guid();
                 var newWrapper = document.createElement(stencil.opts.ieNs + wrapperName);
-                newWrapper.className = (newWrapper.className === "")? classID : newWrapper.className + " " + classID;
+                newWrapper.className = (newWrapper.className === "") ? classID : newWrapper.className + " " + classID;
                 locationElement[creationType](newWrapper);
                 return stencil.util.escapeCSS(stencil.opts.ieNs) + wrapperName + "." + classID; //Convert to JQuery class selector format
             },
             //Finds all next level stencil tags and not further
-            findStencils: function (startElement) {
+            findStencils: function(startElement) {
                 var stencils = {};
                 function search(startElement, collection) {
                     var isStencilTag = function(element) {
-                        if(element.nodeName === "STENCIL" || element.nodeName === "stencil") {
+                        if (element.nodeName === "STENCIL" || element.nodeName === "stencil") {
                             return true;
                         } else {
                             return false;
@@ -491,8 +507,8 @@ stencil = $.extend(stencil || {}, (function() {
 
                     //For each child in the starting node
                     var childNodes = startElement.childNodes;
-                    for(var i = 0; i < childNodes.length; i++) {
-                        if(!isStencilTag(childNodes[i])) {
+                    for (var i = 0; i < childNodes.length; i++) {
+                        if (!isStencilTag(childNodes[i])) {
                             //If its not a stencil tag, continue down the tree
                             search(childNodes[i], collection);
                         } else {
@@ -508,7 +524,7 @@ stencil = $.extend(stencil || {}, (function() {
             cleanUpStencils: function(startElement) {
                 function unwrapper(startElement) {
                     var isStencilTypeTag = function(element) {
-                        if(element.nodeName.indexOf("STENCIL") >= 0 ||
+                        if (element.nodeName.indexOf("STENCIL") >= 0 ||
                             element.nodeName.indexOf("stencil") >= 0) {
                             return true;
                         } else {
@@ -517,9 +533,9 @@ stencil = $.extend(stencil || {}, (function() {
                     };
 
                     //If it is a stencil generated element
-                    if(isStencilTypeTag(startElement)) {
+                    if (isStencilTypeTag(startElement)) {
                         //It may be possible that there are no childs in the stencil tags, if so, just remove the whole node
-                        if(startElement.childNodes.length === 0) {
+                        if (startElement.childNodes.length === 0) {
                             startElement.parentNode.removeChild(startElement);
                         }
                         //Unwrap this element and then run the unwrapper for each of the child nodes
@@ -531,7 +547,7 @@ stencil = $.extend(stencil || {}, (function() {
                     } else {
                         //Otherwise, don't unwrap and just continue recursively
                         var childNodes = startElement.childNodes;
-                        for(var i = 0; i < childNodes.length; i++) {
+                        for (var i = 0; i < childNodes.length; i++) {
                             unwrapper(childNodes[i]);
                         }
                     }
@@ -609,30 +625,86 @@ stencil = $.extend(stencil || {}, (function() {
                 }
                 return result;
             },
-            //Gets the value from a complex object via Javascript object notation
-            getKeyValue: function(obj, keyString) {
+            //Escapes all HTML special characters
+            //https://github.com/janl/mustache.js/blob/master/mustache.js#L82
+            escapeHTML: function(dirtyValue) {
+                if(dirtyValue == null) {
+                    return dirtyValue;
+                }
+                var entityMap = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;",
+                    "/": "&#x2F;"
+                };
+
+                return String(dirtyValue).replace(/[&<>"'\/]/g, function(specialChar) {
+                    return entityMap[specialChar];
+                });
+            },
+            //Cleans the raw key input and returns the key and flags associated with it
+            getKeyParts: function(keyString) {
+                keyParts = keyString.replace(/\{|\}/g, "").split("/");
+                return {
+                    key: keyParts.shift(),
+                    flags: keyParts
+                };
+            },
+            //Gets the value from a complex object via Javascript object notation and applies flags on the dataset value
+            getKeyValue: function(dataset, keyParts) {
                 var value;
                 //Drill down search for placeholders with foo.bar.key notation
-                keyString.split(/[\.\[\]]/).every(function(keyPart, splitIdx) {
-                    if(keyPart === "") {
+                keyParts.key.split(/[\.\[\]]/).every(function(keyPath, splitIdx) {
+                    if (keyPath === "") {
                         return true;
                     }
 
-                    if(splitIdx === 0) {
-                        value = (obj[keyPart] == null)? 
-                            stencil.util.log("Stencil: " + keyPart + " of " + keyString + " not found"): obj[keyPart];
+                    if (splitIdx === 0) {
+                        value = (dataset[keyPath] == null)? stencil.util.log("Stencil: " + keyPath + " of " + keyParts.key + " not found"): dataset[keyPath];
                     } else {
-                        value = (value[keyPart] == null)? 
-                            stencil.util.log("Stencil: " + keyPart + " of " + keyString + " not found"): value[keyPart];
+                        value = (value[keyPath] == null)? stencil.util.log("Stencil: " + keyPath + " of " + keyParts.key + " not found"): value[keyPath];
                     }
 
-                    if(value != null) {
+                    if (value != null) {
                         return true;
                     } else {
                         return false;
                     }
                 });
-                return value;
+
+                return executeFlag(value, keyParts.flags);
+                
+                //Executes all variable flags for this key-value pair and returns the final value
+                function executeFlag(value, flags) {
+                    //Flag executor is a grouping of flag groups containing each flag's logic and a compulsory trigger callback that will execute any flag group logic
+                    //Considering to upgrade to ES6 Map when support is more widespread to suppored ordered flag groups
+                    var flagExecutor = {
+                        escapeHtml: {
+                            esc: function escapeHtmlEsc() {
+                                return stencil.util.escapeHTML(value);
+                            },
+                            noEsc: function escapeHtmlNoEsc() {
+                                return value;
+                            },
+                            default: function escapeHtmlDefault() {
+                                if(stencil.flags.escapeHtml) return this.esc();
+                                else return this.noEsc();
+                            },
+                            trigger: function escapeHtmlTrigger() {
+                                if(flags.indexOf("esc") >= 0) return this.esc();
+                                else if(flags.indexOf("noEsc") >= 0) return this.noEsc();
+                                else return this.default();
+                            }
+                        }
+                    }
+                    
+                    Object.keys(flagExecutor).forEach(function executeFlagGroups(flagGroup) {
+                        value = flagExecutor[flagGroup].trigger();
+                    });
+                    return value;
+                }
             },
             isIE: function() {
                 var myNav = navigator.userAgent.toLowerCase();
@@ -642,7 +714,7 @@ stencil = $.extend(stencil || {}, (function() {
                 return obj === Object(obj);
             },
             log: function(content) {
-                if(stencil.opts.debug) {
+                if (stencil.opts.debug) {
                     console.log(content);
                 }
             }
@@ -652,7 +724,7 @@ stencil = $.extend(stencil || {}, (function() {
 
 (function() {
     var isIE = stencil.util.isIE();
-    if(isIE != false && isIE < 10) {
+    if (isIE != false && isIE < 10) {
         document.createElement("stencil");
         document.createElement("stencil-replicator");
         document.createElement("stencil-output");

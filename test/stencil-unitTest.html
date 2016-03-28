@@ -60,7 +60,7 @@
         </div>
 
         <div id="specificInnerTest">
-            <stencil id="specificInner" data-childStencil="specificInnerChild1 specificInnerChild2">
+            <stencil id="specificInner" data-stencil-childs="specificInnerChild1 specificInnerChild2">
                 <span>{{contents}}</span>
                 <div id="specificInnerChild1">
                     {{ctIdx}}. {{contents}}
@@ -77,9 +77,9 @@
 
         <div id="definedOutputTest">
             <span style="display:block">Test content Head</span>
-            <stencil id="definedOutput" data-childStencil="selectOptions">
+            <stencil id="definedOutput" data-stencil-childs="selectOptions">
                 <span>{{contents}}</span>
-                <select id="selectOptions" data-stencilselector="select.selectThis">
+                <select id="selectOptions" data-stencil-selector="select.selectThis">
                     <option>{{value}}</option>
                 </select>
             </stencil>
@@ -114,7 +114,7 @@
 
         <div id="deepRenderTest" style="display:none">
             <stencil id="deepRender">
-                <span>{{first.second.contents}}</span>
+                <span>{{first.second[contents]}}</span>
             </stencil>
         </div>
 
@@ -183,7 +183,7 @@
         </div>
 
         <div id="specificChildRenderTest" style="display:none">
-            <stencil id="specificChildRender" data-childStencil="specificChildRenderChild1 specificChildRenderChild2">
+            <stencil id="specificChildRender" data-stencil-childs="specificChildRenderChild1 specificChildRenderChild2" data-stencil-destination="#specificChildRenderOutput">
                 <span>{{contents}}</span>
                 <div id="specificChildRenderChild1">
                     <span>{{contents}}</span>
@@ -200,9 +200,9 @@
 
         <div id="definedOutputRenderTest" style="display:none">
             <span style="display:block">Test content Head</span>
-            <stencil id="definedOutputRender" data-childStencil="renderSelectOptions">
+            <stencil id="definedOutputRender" data-stencil-childs="renderSelectOptions">
                 <span>{{contents}}</span>
-                <select id="renderSelectOptions" data-stencilselector="select.selectThis">
+                <select id="renderSelectOptions" data-stencil-selector="select.selectThis">
                     <option value="{{value}}">{{value}}</option>
                 </select>
             </stencil>
@@ -210,18 +210,51 @@
         </div>
 
         <div id="attributeChildStencilTest" style="display:none">
-            <stencil id="attributeChildStencilRender">
+            <stencil id="attributeChildStencilRender" data-stencil-destination="#attributeChildStencilTest">
                 <div>{{content}} - {{lpIdx}}</div>
-                <stencil id="innerStencil" data-childStencil="ddl ddl1">
-                    <select id="ddl">
-                        <option>{{item}} - {{lpIdx}}</option>
-                    </select>
-                    <select id="ddl1">
+                <stencil id="innerStencil" data-stencil-childs="ddl{{lpIdx}}">
+                    <select id="ddl{{lpIdx}}">
                         <option>{{item}} - {{lpIdx}}</option>
                     </select>
                 </stencil>
             </stencil>
         </div>
+        
+        <div id="deepNestedChildStencilTest" style="display:none">
+            <stencil id="deepNestedChildStencilRender" data-stencil-childs="tableRow" data-stencil-destination="#deepNestedChildStencilTest">
+                <table>
+                    <tbody id="tableRow" data-stencil-childs="row{{lpIdx}}">
+                        <tr id="row{{lpIdx}}">
+                            <td>
+                                {{cellData}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </stencil>
+        </div>
+        
+        <div id="htmlEscapeStencilTest" style="display:none">
+            <stencil id="htmlEscapeStencilRender" data-stencil-destination="#htmlEscapeStencilTest">
+                <div>Forced Unescaped</div>
+                <div id="forcedUnescaped">{{content/noEsc}}</div>
+                <div>Forced Escaped</div>
+                <div id="forcedEscaped">{{content/esc}}</div>
+                <div>Flag on undefined variable</div>
+                <div id="undefined">{{undef/esc}}</div>
+                <div>Default HTML escaping</div>
+                <div id="htmlEscapeDefault">{{content}}</div>
+            </stencil>
+        </div>
+        
+        <div id="imgsrcStencilTest" style="display:none">
+            <stencil id="imgsrcStencilRender" data-stencil-destination="#imgsrcStencilTest">
+                <img id="imgsrcImg" data-stencil-imgsrc="imgsrc" />
+            </stencil>
+        </div>
+        
+        <div id="fetchStencilTestFirst" style="display:none"></div>
+        <div id="fetchStencilTestSecond" style="display:none"></div>
     </div>
 </body>
 </html>

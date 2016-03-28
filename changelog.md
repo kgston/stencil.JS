@@ -31,12 +31,12 @@ version 10.3
 version 11
 -------------
 1. Added string render output option to get pure string output
-2. Added solution for specificInners IDs which contain insertion objects e.g. {{lpIdx}}
+2. Added solution for specificInners IDs which contain insertion objects e.g. `{{lpIdx}}`
 3. Updated solution for append render output option that doesn't refresh existing content that its appending to
 
 version 12
 -------------
-1. Updated deep object retrival notation to support array notation a.k.a. array[123].foo[bar]
+1. Updated deep object retrival notation to support array notation a.k.a. `array[123].foo[bar]`
 
 version 13
 -------------
@@ -85,7 +85,7 @@ version 15.1
 
 version 16
 -------------
-1. Added functionality to allow for stencil tag defined childStencils to automatically recourse giving it full functionality of a  nested stencil tag
+1. Added functionality to allow for HTML tags defined childStencils (within a parent stencil tag) to automatically recourse giving it full functionality of a  nested stencil tag
 
 version 16.1
 -------------
@@ -95,3 +95,15 @@ version 16.2
 -------------
 1. Properly rejects all failed fetch requests
 2. Added data-stencilimgsrc attribute for all img tags to automatically insert a src URL dynamically as `{{}}` tags was causing 404 errors
+
+version 17.0
+-------------
+1. Added HTML escaping into render pipeline
+2. Added global setting flag for HTML escaping
+3. Added flags functionality
+4. Added the following template variable flags
+  1. /esc to force HTML escaping regardless of the global flag
+  2. /noEsc to force no HTML escaping regardless of the global flag
+5. Made stencil attributes customizable and reorganized the naming
+6. Fixed bug where `[]` notation was not being detected as a variable name in templates
+7. Added new automated tests for all new functionalities since v12.0

@@ -1,0 +1,14 @@
+<!-- This is an external stencil file used for testing -->
+<stencil id="fetchedStencilFirstRender" data-stencil-destination="#fetchStencilTestFirst">
+    <div id="fetchedChildOutput"></div>
+    <stencil id="fetchedStencilFirstChild" data-stencil-destination="#fetchedChildOutput">
+        <span>{{contents}}</span>
+    </stencil>
+</stencil>
+<stencil id="fetchedStencilSecondRender" data-stencil-destination="#fetchStencilTestSecond" data-stencil-childs="fetchedStencilSecondChild">
+    <table>
+        <tr id="fetchedStencilSecondChild">
+            <td>{{contents}}</td>
+        </tr>
+    </table>
+</stencil>

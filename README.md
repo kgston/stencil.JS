@@ -1,9 +1,9 @@
 stencil.JS
 ==========
 ######*Javascript templating made easy*
-Version: 16.2
+Version: 17.0
 Author: Kingston Chan <kgston@hotmail.com>  
-Last modified: 11 Mar 2015  
+Last modified: 25 Mar 2015  
 
 Copyright (c) 2014-2016 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
 *Full legal text can be found in licence.txt*
@@ -15,6 +15,19 @@ Stencil is a client side Javascript templating engine that allows for rapid temp
 Rational
 --------------
 Stencil was developed out of the need for the ability to view and amend the template continuously throughout the design-development process without having to move it in and out of `<script>` tags or having to chop up templates into multiple parts. Also, template nesting and conditionals comes across as unnecessarily complex with queer symbol semantics that are not immediately obvious to people not familiar with the hieroglyphics, increasing the learning curve. While it is useful to have logic within a templating language, similar to JSP and tag libs, nesting such semantics usually results in a compromise in functionality or legibility. Any sort of logic, should be as much as possible, transparent and determined from the dataset structure.
+
+Upgrade Notes
+--------------
+**From version 14**
+Declaring childStencilIDs within the template.render() function has been removed. Please use the data-stencil-childs attribute in the stencil tag instead
+
+**From version 17**
+All custom stencil attributes have been renamed for clarity and organization. These names is also customizable through the stencil.attributes object so they can be reverted to the old naming style if so deemed necessary
+
+`data-stencildestination`   --> `data-stencil-destination`
+`data-childStencil`         --> `data-stencil-childs`
+`data-stencilSelector`      --> `data-stencil-selector`
+`data-stencilimgsrc`        --> `data-stencil-imgsrc`
 
 Usage
 ==========
@@ -47,7 +60,7 @@ If for some reason you are unable to insert stencil tags into the HTML code, due
 ```html
     <stencil id="attributeChildStencilRender">
         <div>{{content}} - {{lpIdx}}</div>
-        <stencil id="innerStencil" data-childStencil="ddl ddl{{lpIdx}}">
+        <stencil id="innerStencil" data-stencil-childs="ddl ddl{{lpIdx}}">
             <select id="ddl">
                 <option>{{item}} - {{lpIdx}}</option>
             </select>
@@ -61,11 +74,18 @@ If for some reason you are unable to insert stencil tags into the HTML code, due
 ```javascript
     var myStencil = stencil.define("parentStencilID", null, ["childStencilID1", "childStencilID2", ...]);
 ```
-If you would like to specify an output location for the generated stencil, you can set it as the 2nd parameter during manual definition of the stencil using jQuery selector notation:
+If you would like to specify an output location for the generated stencil, you can set it using the `data-stencil-destination` attribute in the stencil tag using the jQuery selector notation:
+```html
+    <stencil id="attributeChildStencilRender" data-stencil-destination="#output .duplicates">
+        ...
+    </stencil>
+```
+The stencil will be inserted into the inner HTML of the specified element/s.
+
+Alternatively if you would like to specify the destination in code, use the following style:
 ```javascript
     var myStencil = stencil.define("stencilID", "#output .duplicates"); 
 ```
-The stencil will be inserted into the inner HTML of the specified element/s.
 
 If you do not need the output to be displayed in a specific location, you can set the destination to `"none"`. Take note that in this case you will need to set the render method output parameter to either `"none"` or `"fragment"`
 
@@ -127,7 +147,7 @@ For templating convienence, you can use the special variables lpIdx and ctIdx fo
 Selector
 --------------
 In order to use the selector to automatically select an option in a drop down menu, set an attribute called `data-stencilselector` (to conform to HTML5 specs) to the select elements:
-    `<select data-stencilselector="firstLevel.secondLevel">...</select>`    
+    `<select data-stencil-selector="firstLevel.secondLevel">...</select>`    
 ***Where:***    
 ```javascript
     var JSON = {firstLevel:{secondLevel:"valueToSelect"}
@@ -136,8 +156,8 @@ In order to use the selector to automatically select an option in a drop down me
 
 Image Tag Source
 --------------
-Putting in `{{variables}}` in src attributes of img tags was causing 404 errors when the templates were being initially displayed in the browser. In order to prevent such exceptions from being generated, the `data-stencilimgsrc` attribute can be used instead to dynamically populate the src attribute
-    `<img data-stencilimgsrc="firstLevel.secondLevel">...</select>`    
+Putting in `{{variables}}` in src attributes of img tags was causing 404 errors when the templates were being initially displayed in the browser. In order to prevent such exceptions from being generated, the `data-stencil-imgsrc` attribute can be used instead to dynamically populate the src attribute
+    `<img data-stencil-imgsrc="firstLevel.secondLevel">...</select>`    
 ***Where:***    
 ```javascript
     var JSON = {firstLevel:{secondLevel:"imgURL"}
@@ -187,6 +207,10 @@ A current workaround is to generate all possible layouts into your stencil objec
 
 On the same note, if you would like to generate an instance of the child stencil without any data, use an empty object.
 
+HTML Escaping
+--------------
+From version 17 onwards, HTML escaping of the values in the input data will be made default. This action can be modified through the option flag escapeHtml. Alternatively, each 
+
 Support for IE 10 and below
 --------------
 As Stencil uses custom tags to define templates and also during the rendering process, support has been quite finicky on older IE browsers. However, a fix has been implemented using namespaces. By adding a namespace to the `<html>` tag, it should work out of the box with IE9. For IE 8 and below, polyfills for ES5 functions will be required.
@@ -205,6 +229,29 @@ APIs
     myStencilObject.clear();
 ```
 *where ? refers to optional parameters*
+
+Flags
+==========
+Within a template variable such as `{{foo}}`, the flags must always be appended at the end. Each flag starts with a `/` and can be combined. That said, only one flag of each category will be read by the render pipeline and is shown in order of precidence as listed below.
+
+For example
+`{{foo/noEsc/esc}}` does not make much sense. Since both flags from both groups are listed, it will apply the flag of highest precidence which is `/esc`
+
+**HTML Escpaing**
+```
+    {{foo/esc}}
+    {{foo/noEsc}}
+```
+
+Stencil Attributes
+==========
+Stencil tag
+* data-stencil-childs - Declare all child stencil IDs here (without the initial #), space delimited
+* data-stencil-destination - Declare the output destination here in jQuery selector format
+Select tag
+* data-stencil-selector - Declare the key of the value within the dataset, that should be matched to the value of the option, that should be selected
+Img tag
+* data-stencil-imgsrc - Declare the key of the value within the dataset, that should be inserted into the src of this img tag
 
 Dependencies
 ==========

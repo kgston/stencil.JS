@@ -21,9 +21,9 @@
         </div>
     </stencil>
     
-    <stencil id="table1" data-childStencil="row">
+    <stencil id="table1" data-stencil-child="row">
         <table>
-            <tbody id="row" data-childStencil="cell">
+            <tbody id="row" data-stencil-child="cell">
                 <tr id="cell">
                     <td>
                         {{cellData}}
@@ -34,7 +34,18 @@
     </stencil>
     
     <stencil id="img">
-        <img data-stencilimgsrc="imgsrc" />
+        <img data-stencil-imgsrc="imgsrc" />
+    </stencil>
+    
+    <stencil id="escape">
+        <div>Forced Unescaped</div>
+        <div>{{unescaped/noEsc}}</div>
+        <br>
+        <div>Forced Escaped</div>
+        <div>{{escaped/esc}}</div>
+        <br>
+        <div>Default HTML escaping</div>
+        <div>{{default}}</div>
     </stencil>
 </body>
 </html>
