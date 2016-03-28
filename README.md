@@ -24,10 +24,10 @@ Declaring childStencilIDs within the template.render() function has been removed
 **From version 17**
 All custom stencil attributes have been renamed for clarity and organization. These names is also customizable through the stencil.attributes object so they can be reverted to the old naming style if so deemed necessary
 
-`data-stencildestination`   --> `data-stencil-destination`
-`data-childStencil`         --> `data-stencil-childs`
-`data-stencilSelector`      --> `data-stencil-selector`
-`data-stencilimgsrc`        --> `data-stencil-imgsrc`
+`data-stencildestination`   > `data-stencil-destination`  
+`data-childStencil`         > `data-stencil-childs`  
+`data-stencilSelector`      > `data-stencil-selector`  
+`data-stencilimgsrc`        > `data-stencil-imgsrc`  
 
 Usage
 ==========
