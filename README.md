@@ -18,10 +18,10 @@ Stencil was developed out of the need for the ability to view and amend the temp
 
 Upgrade Notes
 --------------
-**From version 14**
+**From version 14**  
 Declaring childStencilIDs within the template.render() function has been removed. Please use the data-stencil-childs attribute in the stencil tag instead
 
-**From version 17**
+**From version 17**  
 All custom stencil attributes have been renamed for clarity and organization. These names is also customizable through the stencil.attributes object so they can be reverted to the old naming style if so deemed necessary
 
 `data-stencildestination`   > `data-stencil-destination`  
@@ -237,9 +237,13 @@ Within a template variable such as `{{foo}}`, the flags must always be appended 
 For example
 `{{foo/noEsc/esc}}` does not make much sense. Since both flags from both groups are listed, it will apply the flag of highest precidence which is `/esc`
 
+List of flags
+--------------
 **HTML Escpaing**
 ```
+Force escape HTML
     {{foo/esc}}
+Force no escaping HTML
     {{foo/noEsc}}
 ```
 
