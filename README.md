@@ -1,5 +1,5 @@
 stencil.JS
-==========
+===
 ######*Javascript templating made easy*
 Version: 17.0
 Author: Kingston Chan <kgston@hotmail.com>  
@@ -8,16 +8,13 @@ Last modified: 28 Mar 2015
 Copyright (c) 2014-2016 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
 *Full legal text can be found in licence.txt*
 
-Introduction
---------------
+###Introduction
 Stencil is a client side Javascript templating engine that allows for rapid template prototyping and automatic nested template generation. Supports design time templating, automatic template segregation, nested template generation, JSON object notation and automatic drop down selection. Inspired by popular JS templating libraries such as Mustache.JS and Transparency.JS.
 
-Rational
---------------
+###Rational  
 Stencil was developed out of the need for the ability to view and amend the template continuously throughout the design-development process without having to move it in and out of `<script>` tags or having to chop up templates into multiple parts. Also, template nesting and conditionals comes across as unnecessarily complex with queer symbol semantics that are not immediately obvious to people not familiar with the hieroglyphics, increasing the learning curve. While it is useful to have logic within a templating language, similar to JSP and tag libs, nesting such semantics usually results in a compromise in functionality or legibility. Any sort of logic, should be as much as possible, transparent and determined from the dataset structure.
 
-Upgrade Notes
---------------
+###Upgrade Notes
 **From version 14**  
 Declaring childStencilIDs within the template.render() function has been removed. Please use the data-stencil-childs attribute in the stencil tag instead
 
@@ -30,13 +27,11 @@ All custom stencil attributes have been renamed for clarity and organization. Th
 `data-stencilimgsrc`        > `data-stencil-imgsrc`  
 
 Usage
-==========
-Preparation
---------------
+---
+###Preparation  
 First off, you should have your HTML code ready and identify all parts which should be iterated. Wrap the iterating area in `<stencil id="stencilID">...TemplateHTML...</stencil>` stencil tags and give it a stencil ID. The stencil ID will uniquely identify your stencil for later use. Also, feel free to nest stencil tags inside stencil tags. The engine will automatically identify them, just remember to give them unique IDs too!
 
-Compilation
-=============
+###Compilation  
 There are 2 ways to "compile" the templates for use. You can manually define a stencil by calling:
 ```javascript
     var myStencil = stencil.define("stencilID"); 
@@ -72,8 +67,7 @@ Alternatively if you would like to specify the destination in code, use the foll
 
 If you do not need the output to be displayed in a specific location, you can set the destination to `"none"`. Take note that in this case you will need to set the render method output parameter to either `"none"` or `"fragment"`
 
-Asyncronous Stencil Fetching
---------------
+###Asyncronous Stencil Fetching  
 At times, when you a ton of templates on a single HTML page, loading times at the beginning can create quite a drag on your application. From version 15 onwards, asyncronous loading of stencils via URL can be done through the fetch API. The fetch API returns a jQuery promise with the following APIs:   
 ```javascript
     promise.progress(forEachTemplateInFile(stencilObj));
@@ -104,7 +98,7 @@ At times, when you a ton of templates on a single HTML page, loading times at th
     }
 ```
 ***In:***  
-You have a separate HTML file called myStencils.stencil in a folder called stencils   
+Assume a separate HTML file called myStencils.stencil exists in a folder called stencils   
 *stencils/myStencils.stencil*
 ```html
     <stencil id="foo">
@@ -126,12 +120,11 @@ You have a separate HTML file called myStencils.stencil in a folder called stenc
 
 If an output destination is not specified (either through the fetch API or via the data-stencil-destination attribute), it will be defined with the `"none"` destination and can only be rendered with the `"none"`, `"fragment"` or `"string"` output methods.
 
-Cloning
---------------
+###Cloning
 By default, Stencil will remove your stencil template after "compilation". If you would like to create a new copy of the stencil with a separate output, just define the stencil manually in the first example and the engine will compile a deep copy of the existing stencil for you with a provided destination or a auto generated one. Auto generated outputs will always be exactly after the existing template. Do note that once a stencil structure has been defined, it is not possible to dynamically redefine it except for its output destination and output container. However, this feature may be included in a later version. 
 
 Rendering
-==============
+---
 Once you have compiled the stencil and built your template, we can finally render the finalized stencil with the data inside it. Use the following command to generate the output:   
 ```javascript
     myStencil.render(JSON);
@@ -147,8 +140,7 @@ Each stencil object is linked to an output location and does not change over the
     myStencil.render(JSON, "prepend");
 ```
 
-Data Insertion
---------------
+###Data Insertion
 In order to insert data into a stencil template    
 ```javascript
     var template = stencil.define("template");
@@ -168,8 +160,7 @@ In order to insert data into a stencil template
     <span>Value: foo</span>
 ```
 
-Child stencils
---------------
+###Child stencils
 In order to nest child stencils, use the following syntax:    
 ***Where:***    
 ```javascript
@@ -288,8 +279,7 @@ In certain cases where `<stencil>` tags are not allowed to be nested in certain 
     var myStencil = stencil.define("parentStencilID", null, ["childStencilID1", "childStencilID2", ...]);
 ```
 
-Replication
---------------
+###Replication  
 In order to map data from JSON into child stencils, use the following syntax:    
 ***Where:***    
 ```javascript
@@ -330,8 +320,7 @@ In order to map data from JSON into child stencils, use the following syntax:
     <span>Child: beta - bar</span>
 ```
 
-Deep object retrival notation
---------------
+###Deep object retrieval notation
 In order to map data from the JSON object into the stencil, use the following syntax anywhere within your template code:    
 ***Where:***    
 ```javascript
@@ -356,8 +345,7 @@ In order to map data from the JSON object into the stencil, use the following sy
     <span>Deep value: bar</span>
 ```
 
-Nested key generation
---------------
+###Nested key generation
 Stencil also supports nested keys, allowing runtime determination of the final JSON data to be used. For example:    
 ***Where:***     
 ```javascript
@@ -376,8 +364,7 @@ Stencil also supports nested keys, allowing runtime determination of the final J
     <span>Nested value: valueToBeInserted</span>
 ```
 
-Global data objects
---------------
+###Global data objects
 By default, a child stencil will not have access to its parents dataset and while a parent has access to its child dataset, retrieval from an array is currently not supported. However there may be cases where you have data that needs access by parent and child stencils. For such cases you can utilized the reserved `global` key to store objects that needs to be propagated to all stencils.   
 ***Where:***    
 ```javascript 
@@ -408,12 +395,10 @@ By default, a child stencil will not have access to its parents dataset and whil
     <span>Parent: </span> //No output due to undefined variable
 ```
 
-Special variables
---------------
+###Special variables  
 For templating convienence, you can use the special variables lpIdx and ctIdx for loop index and counter index in your templates. `{{lpIdx}}` starts from 0 while `{{ctIdx}}` starts from 1. These are counter for the rendering order and is unique for every template, including child templates.
 
-Selector
---------------
+###Selector
 In order to use the selector to automatically select an option in a drop down menu, set an attribute called `data-stencilselector` (to conform to HTML5 specs) to the select elements:   
 ***Where:***    
 ```javascript
@@ -440,8 +425,7 @@ In order to use the selector to automatically select an option in a drop down me
     </select>
 ```
 
-Image Tag Source
---------------
+###Image Tag Source  
 Putting in `{{variables}}` in src attributes of img tags was causing 404 errors when the templates were being initially displayed in the browser. In order to prevent such exceptions from being generated, the `data-stencil-imgsrc` attribute can be used instead to dynamically populate the src attribute   
 ***Where:***    
 ```javascript
@@ -468,27 +452,23 @@ If for any reason you want to remove the generated stencil from the output conta
 ```
 If there was previously any content that was appended or prepended to, it will retain the content while removing the stencil. However the content is a cache that was saved when the stencil was generated, so it may not reflect any changes after the stencil was generated. If you need to keep those changes, it is best for the output stencil to have its own container or use the default.
 
-Rendering Tricks
---------------
+###Rendering Tricks
 Rendering within a Table
 Due to HTML restirctions, certain tags are not allowed to become a child of certain tags. This is most obvious with HTML tables. When you insert stencil tags within the table, the stencil tags will get pushed out of the table on page load, so the library is not able to detect the location of the stencils correctly and its template. 
 
 However, by using the data-childStencil attribute within the stencil tag or within a child tag that was previously declared in a parent data-childStencil attribute, the full functionality of nested child stencils becomes avaliable.
 
-Rendering conditionals
---------------
+###Rendering conditionals
 There are times where a layout may change depending on certain conditions. So it is very useful to have the ability to be able to change the resulting output based on the input dataset. Stencil however, does not have this ability to define IF ELSE conditionals for template rendering as it can be rather complex to built in such functionality and would generally increase rendering time across the board as additional checks needs to be built in place. However, this functionality may be built in the future as it is possible; if a more elegant solution exists. 
 
 A current workaround is to generate all possible layouts into your stencil object by making use of nested stencil child objects. Do your own checks on the dataset and then modify the dataset structure such that it "activates" the correct child template by inserting relevant data into the correct reference variable. Take advantage of the feature where null/undefined reference child stencil variables in the dataset do not generate the resulting templating at all.
 
 On the same note, if you would like to generate an instance of the child stencil without any data, use an empty object.
 
-HTML Escaping
---------------
+###HTML Escaping
 From version 17 onwards, HTML escaping of the values in the input data will be made default. This action can be modified through the option flag escapeHtml. Alternatively, each 
 
-Support for IE 10 and below
---------------
+###Support for IE 10 and below
 As Stencil uses custom tags to define templates and also during the rendering process, support has been quite finicky on older IE browsers. However, a fix has been implemented using namespaces. By adding a namespace to the `<html>` tag, it should work out of the box with IE9. For IE 8 and below, polyfills for ES5 functions will be required.
 ```html
 <html xmlns:STENCIL>
@@ -496,7 +476,7 @@ As Stencil uses custom tags to define templates and also during the rendering pr
 
 
 APIs
-==========
+---
 ```javascript
     stencil.build(?startElementID);
     stencil.define(stencilID, ?outputDestination, ?outputElementType);
@@ -507,14 +487,13 @@ APIs
 *where ? refers to optional parameters*
 
 Flags
-==========
+---
 Within a template variable such as `{{foo}}`, the flags must always be appended at the end. Each flag starts with a `/` and can be combined. That said, only one flag of each category will be read by the render pipeline and is shown in order of precidence as listed below.
 
 For example
 `{{foo/noEsc/esc}}` does not make much sense. Since both flags from both groups are listed, it will apply the flag of highest precidence which is `/esc`
 
-List of flags
---------------
+###List of flags
 **HTML Escpaing**
 ```
 Force escape HTML
@@ -524,15 +503,15 @@ Force no escaping HTML
 ```
 
 Stencil Attributes
-==========
-Stencil tag
+---
+`<stencil>`  
 * data-stencil-childs - Declare all child stencil IDs here (without the initial #), space delimited
 * data-stencil-destination - Declare the output destination here in jQuery selector format
-Select tag
+`<select>`  
 * data-stencil-selector - Declare the key of the value within the dataset, that should be matched to the value of the option, that should be selected
-Img tag
+`<img>`  
 * data-stencil-imgsrc - Declare the key of the value within the dataset, that should be inserted into the src of this img tag
 
 Dependencies
-==========
+---
 jQuery
