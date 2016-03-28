@@ -496,21 +496,21 @@ For example
 ###List of flags
 **HTML Escpaing**
 ```
-Force escape HTML
-    {{foo/esc}}
-Force no escaping HTML
-    {{foo/noEsc}}
+Force escape HTML  
+    {{foo/esc}}  
+Force no escaping HTML  
+    {{foo/noEsc}}  
 ```
 
 Stencil Attributes
 ---
 `<stencil>`  
-* data-stencil-childs - Declare all child stencil IDs here (without the initial #), space delimited
-* data-stencil-destination - Declare the output destination here in jQuery selector format
+* data-stencil-childs - Declare all child stencil IDs here (without the initial #), space delimited  
+* data-stencil-destination - Declare the output destination here in jQuery selector format  
 `<select>`  
-* data-stencil-selector - Declare the key of the value within the dataset, that should be matched to the value of the option, that should be selected
+* data-stencil-selector - Declare the key of the value within the dataset, that should be matched to the value of the option, that should be selected  
 `<img>`  
-* data-stencil-imgsrc - Declare the key of the value within the dataset, that should be inserted into the src of this img tag
+* data-stencil-imgsrc - Declare the key of the value within the dataset, that should be inserted into the src of this img tag  
 
 Dependencies
 ---
