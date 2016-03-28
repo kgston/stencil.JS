@@ -1,5 +1,4 @@
-stencil.JS
-===
+#stencil.JS
 ######*Javascript templating made easy*
 Version: 17.0
 Author: Kingston Chan <kgston@hotmail.com>  
@@ -26,8 +25,7 @@ All custom stencil attributes have been renamed for clarity and organization. Th
 `data-stencilSelector`      > `data-stencil-selector`  
 `data-stencilimgsrc`        > `data-stencil-imgsrc`  
 
-Usage
----
+##Usage
 ###Preparation  
 First off, you should have your HTML code ready and identify all parts which should be iterated. Wrap the iterating area in `<stencil id="stencilID">...TemplateHTML...</stencil>` stencil tags and give it a stencil ID. The stencil ID will uniquely identify your stencil for later use. Also, feel free to nest stencil tags inside stencil tags. The engine will automatically identify them, just remember to give them unique IDs too!
 
@@ -123,8 +121,7 @@ If an output destination is not specified (either through the fetch API or via t
 ###Cloning
 By default, Stencil will remove your stencil template after "compilation". If you would like to create a new copy of the stencil with a separate output, just define the stencil manually in the first example and the engine will compile a deep copy of the existing stencil for you with a provided destination or a auto generated one. Auto generated outputs will always be exactly after the existing template. Do note that once a stencil structure has been defined, it is not possible to dynamically redefine it except for its output destination and output container. However, this feature may be included in a later version. 
 
-Rendering
----
+##Rendering
 Once you have compiled the stencil and built your template, we can finally render the finalized stencil with the data inside it. Use the following command to generate the output:   
 ```javascript
     myStencil.render(JSON);
@@ -444,8 +441,7 @@ Putting in `{{variables}}` in src attributes of img tags was causing 404 errors 
     <img src="imgURL"/>
 ```
 
-Clearing output
---------------
+###Clearing output
 If for any reason you want to remove the generated stencil from the output container, just call:
 ```javascript
     myStencil.clear();
@@ -475,8 +471,7 @@ As Stencil uses custom tags to define templates and also during the rendering pr
 ```
 
 
-APIs
----
+##APIs
 ```javascript
     stencil.build(?startElementID);
     stencil.define(stencilID, ?outputDestination, ?outputElementType);
@@ -486,8 +481,7 @@ APIs
 ```
 *where ? refers to optional parameters*
 
-Flags
----
+##Flags
 Within a template variable such as `{{foo}}`, the flags must always be appended at the end. Each flag starts with a `/` and can be combined. That said, only one flag of each category will be read by the render pipeline and is shown in order of precidence as listed below.
 
 For example
@@ -502,8 +496,7 @@ Force no escaping HTML
     {{foo/noEsc}}  
 ```
 
-Stencil Attributes
----
+##Stencil Attributes
 `<stencil>`  
 * data-stencil-childs - Declare all child stencil IDs here (without the initial #), space delimited  
 * data-stencil-destination - Declare the output destination here in jQuery selector format  
@@ -514,6 +507,5 @@ Stencil Attributes
 `<img>`  
 * data-stencil-imgsrc - Declare the key of the value within the dataset, that should be inserted into the src of this img tag  
 
-Dependencies
----
+##Dependencies
 jQuery
