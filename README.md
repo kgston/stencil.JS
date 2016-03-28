@@ -277,7 +277,7 @@ In certain cases where `<stencil>` tags are not allowed to be nested in certain 
 ```
 
 ###Replication  
-In order to map data from JSON into child stencils, use the following syntax:    
+In order to duplicate templates, wrap the data object in an array as shown:    
 ***Where:***    
 ```javascript
     var template = stencil.define("template");
@@ -362,7 +362,7 @@ Stencil also supports nested keys, allowing runtime determination of the final J
 ```
 
 ###Global data objects
-By default, a child stencil will not have access to its parents dataset and while a parent has access to its child dataset, retrieval from an array is currently not supported. However there may be cases where you have data that needs access by parent and child stencils. For such cases you can utilized the reserved `global` key to store objects that needs to be propagated to all stencils.   
+By default, a child stencil will not have access to its parents dataset and while a parent has access to its child dataset. However there may be cases where you have data that needs access by both parent and child stencils. For such cases you can utilize the reserved `global` key to store values that needs to be propagated to all stencils.   
 ***Where:***    
 ```javascript 
     var template = stencil.define("template");
@@ -393,10 +393,10 @@ By default, a child stencil will not have access to its parents dataset and whil
 ```
 
 ###Special variables  
-For templating convienence, you can use the special variables lpIdx and ctIdx for loop index and counter index in your templates. `{{lpIdx}}` starts from 0 while `{{ctIdx}}` starts from 1. These are counter for the rendering order and is unique for every template, including child templates.
+For templating convienence, you can use the special variables lpIdx and ctIdx in your templates. `{{lpIdx}}` starts from 0 while `{{ctIdx}}` starts from 1. These are counter for the rendering order and is unique for every template, including child templates.
 
 ###Selector
-In order to use the selector to automatically select an option in a drop down menu, set an attribute called `data-stencilselector` (to conform to HTML5 specs) to the select elements:   
+In order to use the selector to automatically select an option in a drop down menu, set an attribute called `data-stencil-selector` to the select elements:   
 ***Where:***    
 ```javascript
     var template = stencil.define("template");
