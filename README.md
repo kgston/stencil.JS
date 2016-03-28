@@ -507,8 +507,10 @@ Stencil Attributes
 `<stencil>`  
 * data-stencil-childs - Declare all child stencil IDs here (without the initial #), space delimited  
 * data-stencil-destination - Declare the output destination here in jQuery selector format  
+
 `<select>`  
 * data-stencil-selector - Declare the key of the value within the dataset, that should be matched to the value of the option, that should be selected  
+
 `<img>`  
 * data-stencil-imgsrc - Declare the key of the value within the dataset, that should be inserted into the src of this img tag  
 
