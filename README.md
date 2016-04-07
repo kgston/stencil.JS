@@ -509,3 +509,7 @@ Force no escaping HTML
 
 ##Dependencies
 jQuery
+
+## Acknowedgements
+Syntax files was developed based on the handlebars tmLanguage files  
+https://github.com/nrw/sublime-text-handlebars
