@@ -3,7 +3,7 @@
     "displayName": "Stencil",
     "description": "Provides syntax colourizer for stencil templates",
     "repository": "https://github.com/kgston/stencil.JS",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "publisher": "kgston",
     "engines": {
         "vscode": "^0.10.10"

@@ -6,11 +6,9 @@ fileTypes: [stencil]
 uuid: fa1eff84-3bcd-4468-ab7f-b3dd16e59843
 
 patterns:
-- include: '#template-variables'
+- include: '#template-variables-odd'
 
-- include: '#stencil-tag-start'
-
-- include: '#stencil-tag-end'
+- include: '#stencil-tag-odd'
 
 - include: '#stencil-tag-attributes'
 
@@ -19,38 +17,77 @@ patterns:
 - include: 'text.html.basic'
 
 repository:
-  stencil-tag-start:
-    name: meta.function.tag.start.stencil
+  stencil-tag-odd:
+    name: meta.function.tag.odd.stencil
     begin: (<)(stencil)
     beginCaptures:
       '1': {name: support.class.tag.stencil}
       '2': {name: support.class.tag.stencil}
-    end: (>)
-    endCaptures:
-      '1': {name: support.class.tag.stencil}
-    patterns:
-    - include: '#tag-stuff'
-  
-  stencil-tag-end:
-    name: meta.function.tag.end.stencil
-    match: (</)(stencil)(>)
+      '3': {name: support.class.tag.stencil}
+    end: (</)(stencil)(>)
     captures:
       '1': {name: support.class.tag.stencil}
       '2': {name: support.class.tag.stencil}
       '3': {name: support.class.tag.stencil}
-  
+    patterns:
+    - include: '#tag_id_attribute'
+    - include: '#stencil-tag-attributes'
+    - include: '#tag-stuff'
+    - include: '#stencil-tag-endcap-odd'
+    - include: '#template-variables-odd'
+    - include: '#stencil-tag-even'
+    - include: '#html_tags'
+
+  stencil-tag-even:
+    name: meta.function.tag.even.stencil
+    begin: (<)(stencil)
+    beginCaptures:
+      '1': {name: constant.language.tag.stencil}
+      '2': {name: constant.language.tag.stencil}
+      '3': {name: constant.language.tag.stencil}
+    end: (</)(stencil)(>)
+    captures:
+      '1': {name: constant.language.tag.stencil}
+      '2': {name: constant.language.tag.stencil}
+      '3': {name: constant.language.tag.stencil}
+    patterns:
+    - include: '#tag_id_attribute'
+    - include: '#stencil-tag-attributes'
+    - include: '#tag-stuff'
+    - include: '#stencil-tag-endcap-even'
+    - include: '#template-variables-odd'
+    - include: '#stencil-tag-odd'
+    - include: '#html_tags'
+
+  stencil-tag-endcap-odd:
+    name: meta.function.tag.odd.start.endcap.stencil
+    match: ([^>])?(>)
+    captures:
+      '2': {name: support.class.tag.stencil}
+    patterns:
+    - include: '#stencil-tag-attributes'
+
+  stencil-tag-endcap-even:
+    name: meta.function.tag.even.start.endcap.stencil
+    match: ([^>])?(>)
+    captures:
+      '2': {name: keyword.other.tag.stencil}
+    patterns:
+    - include: '#stencil-tag-attributes'
+
   stencil-tag-attributes:
     name: meta.function.tag.attribute.stencil
-    match: (data-stencil-[-a-zA-Z]+)(=)(["'])([-a-zA-Z0-9_\./]*)(['"])*
+    match: (data-stencil-[-a-zA-Z]+)(=)(["'])([-a-zA-Z0-9_\./ ]*)(['"])
     captures:
       '1': {name: support.variable.stencil}
       '2': {name: support.variable.stencil}
       '3': {name: string.quoted.begin.html}
-      '4': {name: constant.character.entity.html}
+      '4': {name: variable.parameter.attribute.stencil}
       '5': {name: string.quoted.string.end.html}
+      '6': {name: support.class.tag.stencil}
   
-  template-variables:
-    name: meta.function.variable.stencil
+  template-variables-odd:
+    name: meta.function.variable.odd.stencil
     begin: (\{\{)
     beginCaptures:
       '1': {name: support.other.variable.start.stencil}
@@ -58,17 +95,31 @@ repository:
     endCaptures:
       '1': {name: support.other.variable.end.stencil}
     patterns:
-    - include: '$self'
+    - include: '#template-variables-even'
+    - include: '#variable-name'
+    - include: '#subselector-char'
+    - include: '#variable-flag'
+
+  template-variables-even:
+    name: meta.function.variable.even.stencil
+    begin: (\{\{)
+    beginCaptures:
+      '1': {name: keyword.operator.variable.start.stencil}
+    end: (\}\})
+    endCaptures:
+      '1': {name: keyword.operator.variable.end.stencil}
+    patterns:
+    - include: '#template-variables-odd'
     - include: '#variable-name'
     - include: '#subselector-char'
     - include: '#variable-flag'
   
   variable-name:
-    name: variable.parameter.handlebars
+    name: variable.parameter.template.stencil
     match: \w
   
   subselector-char:
-    name: keyword.operator.drill.stencil
+    name: keyword.operator.subobject.stencil
     match: \.\[\]
   
   variable-flag:
@@ -237,28 +288,28 @@ repository:
     - include: '#string-double-quoted'
 
   string-double-quoted:
-    name: string.quoted.double.handlebars
+    name: string.quoted.double.html
     begin: '"'
     beginCaptures:
-      '0': {name: punctuation.definition.string.begin.html}
+      '0': {name: string.quoted.begin.html}
     end: '"'
     endCaptures:
-      '0': {name: punctuation.definition.string.end.html}
+      '0': {name: string.quoted.end.html}
     patterns:
     - include: '#escaped-double-quote'
-    - include: '#template-variables'
+    - include: '#template-variables-odd'
 
   string-single-quoted:
-    name: string.quoted.single.handlebars
+    name: string.quoted.single.html
     begin: ''''
     beginCaptures:
-      '0': {name: punctuation.definition.string.begin.html}
+      '0': {name: string.quoted.begin.html}
     end: ''''
     endCaptures:
-      '0': {name: punctuation.definition.string.end.html}
+      '0': {name: string.quoted.end.html}
     patterns:
     - include: '#escaped-single-quote'
-    - include: '#template-variables'
+    - include: '#template-variables-odd'
 
   tag-stuff:
     patterns:
@@ -266,7 +317,7 @@ repository:
     - include: '#tag_id_attribute'
     - include: '#tag_generic_attribute'
     - include: '#string'
-    - include: '#template-variables'
+    - include: '#template-variables-odd'
 
   tag_generic_attribute:
     name: entity.other.attribute-name.html

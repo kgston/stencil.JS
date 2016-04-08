@@ -12,15 +12,11 @@
 	<array>
 		<dict>
 			<key>include</key>
-			<string>#template-variables</string>
+			<string>#template-variables-odd</string>
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#stencil-tag-start</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#stencil-tag-end</string>
+			<string>#stencil-tag-odd</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -578,21 +574,161 @@
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.string.end.html</string>
+					<string>variable.parameter.attribute.stencil</string>
 				</dict>
 				<key>5</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.end.html</string>
+					<string>punctuation.definition.string.begin.html</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(data-stencil-[-a-zA-Z]+)(=)(["'])([-a-zA-Z0-9_\./]*)(['"])*</string>
+			<string>(data-stencil-[-a-zA-Z]+)(=)(["'])([-a-zA-Z0-9_\./ ]*)(['"])</string>
 			<key>name</key>
 			<string>meta.function.tag.attribute.stencil</string>
 		</dict>
-		<key>stencil-tag-end</key>
+		<key>stencil-tag-endcap-even</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.html</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>([^&gt;])?(&gt;)</string>
+			<key>name</key>
+			<string>meta.function.tag.even.start.endcap.stencil</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#stencil-tag-attributes</string>
+				</dict>
+			</array>
+		</dict>
+		<key>stencil-tag-endcap-odd</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.html</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>([^&gt;])?(&gt;)</string>
+			<key>name</key>
+			<string>meta.function.tag.odd.start.endcap.stencil</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#stencil-tag-attributes</string>
+				</dict>
+			</array>
+		</dict>
+		<key>stencil-tag-even</key>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;)(stencil)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.html</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.language.tag.stencil</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.html</string>
+				</dict>
+			</dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.html</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.language.tag.stencil</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.html</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(&lt;/)(stencil)(&gt;)</string>
+			<key>name</key>
+			<string>meta.function.tag.even.stencil</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tag_id_attribute</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#stencil-tag-attributes</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#tag-stuff</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#stencil-tag-endcap-even</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#template-variables-odd</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#stencil-tag-odd</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#html_tags</string>
+				</dict>
+			</array>
+		</dict>
+		<key>stencil-tag-odd</key>
+		<dict>
+			<key>begin</key>
+			<string>(&lt;)(stencil)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.html</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>support.class.tag.stencil</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.tag.html</string>
+				</dict>
+			</dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -611,45 +747,39 @@
 					<string>punctuation.definition.tag.html</string>
 				</dict>
 			</dict>
-			<key>match</key>
+			<key>end</key>
 			<string>(&lt;/)(stencil)(&gt;)</string>
 			<key>name</key>
-			<string>meta.function.tag.end.stencil</string>
-		</dict>
-		<key>stencil-tag-start</key>
-		<dict>
-			<key>begin</key>
-			<string>(&lt;)(stencil)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.tag.html</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>support.class.tag.stencil</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(&gt;)</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.tag.html</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.function.tag.start.stencil</string>
+			<string>meta.function.tag.odd.stencil</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#tag_id_attribute</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#stencil-tag-attributes</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#tag-stuff</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#stencil-tag-endcap-odd</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#template-variables-odd</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#stencil-tag-even</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#html_tags</string>
 				</dict>
 			</array>
 		</dict>
@@ -690,7 +820,7 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.quoted.double.handlebars</string>
+			<string>string.quoted.double.stencil</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -699,7 +829,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#template-variables</string>
+					<string>#template-variables-odd</string>
 				</dict>
 			</array>
 		</dict>
@@ -726,7 +856,7 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>string.quoted.single.handlebars</string>
+			<string>string.quoted.single.stencil</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -735,7 +865,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#template-variables</string>
+					<string>#template-variables-odd</string>
 				</dict>
 			</array>
 		</dict>
@@ -744,7 +874,7 @@
 			<key>match</key>
 			<string>\.\[\]</string>
 			<key>name</key>
-			<string>keyword.operator.drill.stencil</string>
+			<string>keyword.operator.subobject.stencil</string>
 		</dict>
 		<key>tag-stuff</key>
 		<dict>
@@ -768,7 +898,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#template-variables</string>
+					<string>#template-variables-odd</string>
 				</dict>
 			</array>
 		</dict>
@@ -830,7 +960,51 @@
 				</dict>
 			</array>
 		</dict>
-		<key>template-variables</key>
+		<key>template-variables-even</key>
+		<dict>
+			<key>begin</key>
+			<string>(\{\{)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.language.variable.start.stencil</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\}\})</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.language.variable.end.stencil</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.function.variable.even.stencil</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#template-variables-odd</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable-name</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#subselector-char</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable-flag</string>
+				</dict>
+			</array>
+		</dict>
+		<key>template-variables-odd</key>
 		<dict>
 			<key>begin</key>
 			<string>(\{\{)</string>
@@ -853,12 +1027,12 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>meta.function.variable.stencil</string>
+			<string>meta.function.variable.odd.stencil</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>$self</string>
+					<string>#template-variables-even</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -886,7 +1060,7 @@
 			<key>match</key>
 			<string>\w</string>
 			<key>name</key>
-			<string>variable.parameter.stencil</string>
+			<string>variable.parameter.template.stencil</string>
 		</dict>
 	</dict>
 	<key>scopeName</key>
