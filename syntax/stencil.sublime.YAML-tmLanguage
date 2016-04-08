@@ -50,13 +50,13 @@ repository:
       '5': {name: string.quoted.string.end.html}
   
   template-variables:
-    name: meta.function.block.start.stencil
+    name: meta.function.variable.stencil
     begin: (\{\{)
     beginCaptures:
-      '1': {name: support.constant.stencil}
+      '1': {name: support.other.variable.start.stencil}
     end: (\}\})
     endCaptures:
-      '1': {name: support.constant.stencil}
+      '1': {name: support.other.variable.end.stencil}
     patterns:
     - include: '$self'
     - include: '#variable-name'
@@ -68,11 +68,11 @@ repository:
     match: \w
   
   subselector-char:
-    name: constant.character.stencil
+    name: keyword.operator.drill.stencil
     match: \.\[\]
   
   variable-flag:
-    name: meta.function.flag.stencil
+    name: support.function.flag.stencil
     match: (/)([-a-zA-Z0-9]+)
 
   entities:

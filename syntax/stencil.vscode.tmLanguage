@@ -573,17 +573,17 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.begin.html</string>
+					<string>punctuation.definition.string.begin.html</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>constant.character.entity.html</string>
+					<string>string.quoted.string.end.html</string>
 				</dict>
 				<key>5</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.string.end.html</string>
+					<string>punctuation.definition.string.end.html</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -598,7 +598,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>support.class.tag.stencil</string>
+					<string>punctuation.definition.tag.html</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -608,7 +608,7 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>support.class.tag.stencil</string>
+					<string>punctuation.definition.tag.html</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -625,7 +625,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>support.class.tag.stencil</string>
+					<string>punctuation.definition.tag.html</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -640,7 +640,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>support.class.tag.stencil</string>
+					<string>punctuation.definition.tag.html</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -744,7 +744,7 @@
 			<key>match</key>
 			<string>\.\[\]</string>
 			<key>name</key>
-			<string>constant.character.stencil</string>
+			<string>keyword.operator.drill.stencil</string>
 		</dict>
 		<key>tag-stuff</key>
 		<dict>
@@ -839,7 +839,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>support.constant.stencil</string>
+					<string>support.other.variable.start.stencil</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -849,11 +849,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>support.constant.stencil</string>
+					<string>support.other.variable.end.stencil</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>meta.function.block.start.stencil</string>
+			<string>meta.function.variable.stencil</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -879,14 +879,14 @@
 			<key>match</key>
 			<string>(/)([-a-zA-Z0-9]+)</string>
 			<key>name</key>
-			<string>meta.function.flag.stencil</string>
+			<string>support.function.flag.stencil</string>
 		</dict>
 		<key>variable-name</key>
 		<dict>
 			<key>match</key>
 			<string>\w</string>
 			<key>name</key>
-			<string>variable.parameter.handlebars</string>
+			<string>variable.parameter.stencil</string>
 		</dict>
 	</dict>
 	<key>scopeName</key>
