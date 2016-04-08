@@ -1,0 +1,27 @@
+{
+    "name": "stencil",
+    "displayName": "Stencil",
+    "description": "Provides syntax colourizer for stencil templates",
+    "repository": "https://github.com/kgston/stencil.JS",
+    "version": "1.0.0",
+    "publisher": "kgston",
+    "engines": {
+        "vscode": "^0.10.10"
+    },
+    "categories": [
+        "Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "stencil",
+            "aliases": ["Stencil", "stencil"],
+            "extensions": [".stencil"],
+            "configuration": "./stencil.configuration.json"
+        }],
+        "grammars": [{
+            "language": "stencil",
+            "scopeName": "text.html.stencil",
+            "path": "./syntaxes/stencil.vscode.tmLanguage"
+        }]
+    }
+}
