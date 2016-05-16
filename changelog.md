@@ -13,9 +13,9 @@
 ## version 10.0
 
 1. Optimized some code
-2. Fixed none output type bug 
-3. Added nested keys 
-4. Public release
+1. Fixed none output type bug
+1. Added nested keys
+1. Public release
 
 ## version 10.1
 

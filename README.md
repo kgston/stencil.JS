@@ -83,7 +83,7 @@ If you do not need the output to be displayed in a specific location, you can se
 
 ### Asyncronous Stencil Fetching  
 
-At times, when you a ton of templates on a single HTML page, loading times at the beginning can create quite a drag on your application. From version 15 onwards, asyncronous loading of stencils via URL can be done through the fetch API. The fetch API returns a jQuery promise with the following APIs:
+At times, when you load a ton of templates on a single HTML page, loading times at the beginning can create quite a drag on your application. From version 15 onwards, asyncronous loading of stencils via URL can be done through the fetch API. The fetch API returns a jQuery promise with the following APIs:
 
 ```javascript
     promise.progress(forEachTemplateInFile(stencilObj));
@@ -535,9 +535,9 @@ If there was previously any content that was appended or prepended to, it will r
 ### Rendering Tricks
 
 Rendering within a Table
-Due to HTML restirctions, certain tags are not allowed to become a child of certain tags. This is most obvious with HTML tables. When you insert stencil tags within the table, the stencil tags will get pushed out of the table on page load, so the library is not able to detect the location of the stencils correctly and its template. 
+Due to HTML restirctions, certain tags are not allowed to become a child of certain tags. This is most obvious with HTML tables. When you insert stencil tags within the table, the stencil tags will get pushed out of the table on page load, so the library is not able to detect the location of the stencils correctly and its template.
 
-However, by using the data-childStencil attribute within the stencil tag or within a child tag that was previously declared in a parent data-childStencil attribute, the full functionality of nested child stencils becomes avaliable.
+However, by using the data-stencil-childs attribute within the stencil tag or within a child tag that was previously declared in a parent data-stencil-childs attribute, the full functionality of nested child stencils becomes avaliable.
 
 ### Rendering conditionals
 
