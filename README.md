@@ -565,7 +565,11 @@ When working with large or complicated stencil templates, it can become very dif
 
 #### Sublime Text
 
-After installing package control, hit Preferences > Browse Packages.... Create a new folder for stencil and paste in stencil.sublime.tmLanguage into the folder. Restart Sublime Text. The language will now be avaliable from the language selection in the bottom right corner
+After installing package control, `Ctrl+Shift+P` and type and select `install package`. Search and install for a package called `stencil`.
+
+OR
+
+Hit Preferences > Browse Packages.... Create a new folder called `stencil` and paste in stencil.sublime.tmLanguage into the folder. Restart Sublime Text. The language will now be avaliable from the language selection in the bottom right corner
 
 #### Visual Studio Code
 
