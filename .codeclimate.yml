@@ -7,10 +7,11 @@ engines:
       - javascript
   eslint:
     enabled: true
-    eqeqeq:
-      enabled: false
-    no-eq-null:
-      enabled: false
+    checks:
+      eqeqeq:
+        enabled: false
+      no-eq-null:
+        enabled: false
   fixme:
     enabled: true
 ratings:
