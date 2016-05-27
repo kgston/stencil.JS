@@ -16,5 +16,6 @@ ratings:
   - "**.module"
 exclude_paths:
 - test/
+- sandbox/
 - "**.min.js"
 - "**.min.map"

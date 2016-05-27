@@ -5,27 +5,27 @@
  * https://github.com/kgston/stencil.JS
 */
 var stencil = stencil || {};
-stencil.opts = $.extend(stencil.opts || {}, function() {
+stencil.opts = $.extend(stencil.opts || {}, (function() {
     return {
         debug: false,
         defaultOutputElement: "stencil-output",
         fetchTimeout: 30000,
         ieNs: ""
     };
-} ());
-stencil.flags = $.extend(stencil.flags || {}, function() {
+}) ());
+stencil.flags = $.extend(stencil.flags || {}, (function() {
     return {
         escapeHtml: true
     };
-} ());
-stencil.attributes = $.extend(stencil.attributes || {}, function() {
+}) ());
+stencil.attributes = $.extend(stencil.attributes || {}, (function() {
     return {
         destination: "data-stencil-destination",
         childStencils: "data-stencil-childs",
         selector: "data-stencil-selector",
         imgsrc: "data-stencil-imgsrc"
     };
-} ());
+}) ());
 stencil = $.extend(stencil || {}, (function() {
     return {
         stencilHolder: {},
@@ -654,23 +654,18 @@ stencil = $.extend(stencil || {}, (function() {
             },
             //Gets the value from a complex object via Javascript object notation and applies flags on the dataset value
             getKeyValue: function(dataset, keyParts) {
-                var value;
+                var value = JSON.parse(JSON.stringify(dataset));
                 //Drill down search for placeholders with foo.bar.key notation
                 keyParts.key.split(/[\.\[\]]/).every(function(keyPath, splitIdx) {
                     if (keyPath === "") {
                         return true;
-                    }
-
-                    if (splitIdx === 0) {
-                        value = (dataset[keyPath] == null)? stencil.util.log("Stencil: " + keyPath + " of " + keyParts.key + " not found"): dataset[keyPath];
                     } else {
                         value = (value[keyPath] == null)? stencil.util.log("Stencil: " + keyPath + " of " + keyParts.key + " not found"): value[keyPath];
-                    }
-
-                    if (value != null) {
-                        return true;
-                    } else {
-                        return false;
+                        if (value != null) {
+                            return true;
+                        } else {
+                            return false;
+                        }
                     }
                 });
 
@@ -720,9 +715,9 @@ stencil = $.extend(stencil || {}, (function() {
             }
         }
     };
-})());
+}) ());
 
-(function() {
+(function ieNamespaceFix() {
     var isIE = stencil.util.isIE();
     if (isIE != false && isIE < 10) {
         document.createElement("stencil");
@@ -730,4 +725,4 @@ stencil = $.extend(stencil || {}, (function() {
         document.createElement("stencil-output");
         stencil.opts.ieNs = "STENCIL:";
     }
-})();
+}) ();
