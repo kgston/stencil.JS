@@ -1,5 +1,5 @@
-var stencils = stencil.define("div1");
-var table1 = stencil.define("table1");
+//var stencils = stencil.define("div1");
+//var table1 = stencil.define("table1");
 //OR
 var stencils = stencil.build();
 
