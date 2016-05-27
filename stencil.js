@@ -12,12 +12,12 @@ stencil.opts = $.extend(stencil.opts || {}, (function() {
         fetchTimeout: 30000,
         ieNs: ""
     };
-}) ());
+}()));
 stencil.flags = $.extend(stencil.flags || {}, (function() {
     return {
         escapeHtml: true
     };
-}) ());
+}()));
 stencil.attributes = $.extend(stencil.attributes || {}, (function() {
     return {
         destination: "data-stencil-destination",
@@ -25,7 +25,7 @@ stencil.attributes = $.extend(stencil.attributes || {}, (function() {
         selector: "data-stencil-selector",
         imgsrc: "data-stencil-imgsrc"
     };
-}) ());
+}()));
 stencil = $.extend(stencil || {}, (function() {
     return {
         stencilHolder: {},
@@ -715,7 +715,7 @@ stencil = $.extend(stencil || {}, (function() {
             }
         }
     };
-}) ());
+}()));
 
 (function ieNamespaceFix() {
     var isIE = stencil.util.isIE();
@@ -725,4 +725,4 @@ stencil = $.extend(stencil || {}, (function() {
         document.createElement("stencil-output");
         stencil.opts.ieNs = "STENCIL:";
     }
-}) ();
+}());
