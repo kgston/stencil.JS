@@ -22,6 +22,7 @@ stencil.attributes = $.extend(stencil.attributes || {}, (function() {
     return {
         destination: "data-stencil-destination",
         childStencils: "data-stencil-childs",
+        recurse: "data-stencil-recurse",
         selector: "data-stencil-selector",
         imgsrc: "data-stencil-imgsrc"
     };
@@ -346,6 +347,7 @@ stencil = $.extend(stencil || {}, (function() {
             }
 
             //If no stencilFragment specified, get html from tagID
+            var isParent = (stencilFragment)? false: true;
             var tagElem = stencilFragment || $("#" + stencil.util.escapeCSS(tagID));
             if (!tagElem.length) {
                 stencil.util.log("Stencil: Tag ID '" + tagID + "' provided is not found!");
@@ -439,6 +441,12 @@ stencil = $.extend(stencil || {}, (function() {
 
             //Save to the holder before returning stencil object
             stencil.stencilHolder[tagID] = parentStencil;
+
+            //If is the main parent stencil, relink all recursive stencils
+            if(isParent) {
+                stencil.util.buildRecursiveLinkages(parentStencil);
+            }
+
             return parentStencil;
         },
         //Auto compile function to scan entire page for stencil templates
@@ -511,6 +519,19 @@ stencil = $.extend(stencil || {}, (function() {
                         if (!isStencilTag(childNodes[i])) {
                             //If its not a stencil tag, continue down the tree
                             search(childNodes[i], collection);
+                        } else if(childNodes[i].attributes[stencil.attributes.recurse] != null) {
+                            //If it is a recurse tag, create a placeholder for the linkage builder
+                            var tempRecurseDestination = stencil.util.createWrapper(
+                                $(childNodes[i]), 
+                                stencil.opts.defaultOutputElement, 
+                                "after"
+                            );
+
+                            collection[childNodes[i].attributes[stencil.attributes.recurse].value] = {
+                                recurse: true,
+                                tempDestination: tempRecurseDestination
+                            }
+                            childNodes[i].remove();
                         } else {
                             //Otherwise define the stencil at this node and stop for this branch
                             collection[childNodes[i].id] = stencil.define(childNodes[i].id, null, "stencil-output", $(childNodes[i]));
@@ -519,6 +540,25 @@ stencil = $.extend(stencil || {}, (function() {
                 }
                 search(startElement.get(0), stencils);
                 return stencils;
+            },
+            /*
+            Runs through the childStencils in the supplied parent stencil and looks for recursive placeholders. It then relinks these placeholders with the actual stencil and replaces the destination in the template with the actual output destination
+            */
+            buildRecursiveLinkages: function(parentStencil) {
+                Object.keys(parentStencil.childStencils).forEach(function(childKey) {
+                    var childStencil = parentStencil.childStencils[childKey]
+                    if(childStencil.recurse) {
+                        //Replace the temp obj with the actual stencil, forming a cyclic loop
+                        parentStencil.childStencils[childKey] = stencil.stencilHolder[childKey];
+                        //Replace the output destination in the template to match with the real stencil
+                        parentStencil.template = parentStencil.template.replace(
+                            childStencil.tempDestination.split(".")[1], 
+                            parentStencil.childStencils[childKey].destination.split(".")[1]
+                        );
+                    } else {
+                        stencil.util.buildRecursiveLinkages(childStencil);
+                    }
+                });
             },
             //Cleans up all the stencil generated DOMs that will not be used after template generation
             cleanUpStencils: function(startElement) {

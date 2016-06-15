@@ -109,3 +109,7 @@
 1. Made stencil attributes customizable and reorganized the naming
 1. Fixed bug where `[]` notation was not being detected as a variable name in templates
 1. Added new automated tests for all new functionalities since v12.0
+
+## version 18.0
+
+1. Added recursive template functionality

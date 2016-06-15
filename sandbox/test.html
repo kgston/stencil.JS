@@ -20,6 +20,20 @@
             </stencil>
         </div>
     </stencil>
+
+    <stencil id="recursiveList">
+        <div>
+            <span>Title: {{title}}</span>
+            <stencil id="list">
+                <ul>
+                    <stencil id="listItem">
+                        <li>{{content}}</li>
+                        <stencil data-stencil-recurse="list"></stencil>
+                    </stencil>
+                </ul>
+            </stencil>
+        </div>
+    </stencil>
     
     <stencil id="table1" data-stencil-child="row">
         <table>

@@ -27,6 +27,31 @@ stencils.div1.render([{
     }]
 }]);
 
+var recursiveList = stencil.define("recursiveList");
+recursiveList.render({
+    title: "Infinite list",
+    list: {
+        listItem: [{
+            content: "foo"
+        }, {
+            content: "bar",
+            list: {
+                listItem: [{
+                    content: "bar - foo"
+                }, {
+                    content: "bar - bar",
+                    list: {
+                        listItem: [{
+                            content: "bar - bar - foo"
+                        }, {
+                            content: "bar - bar - black sheep"
+                        }]
+                    }
+                }]
+            }
+        }]
+    }
+});
 
 table1.render({
     row: [{

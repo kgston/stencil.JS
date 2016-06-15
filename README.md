@@ -2,9 +2,9 @@
 
 ###### *Javascript templating made easy*
 
-Version: 17.0
+Version: 18.0
 Author: Kingston Chan <kgston@hotmail.com>  
-Last modified: 28 Mar 2016
+Last modified: 15 Jun 2016
 
 Copyright (c) 2014-2016 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
 *Full legal text can be found in licence.txt*
@@ -321,6 +321,77 @@ In certain cases where `<stencil>` tags are not allowed to be nested in certain 
     var myStencil = stencil.define("parentStencilID", null, ["childStencilID1", "childStencilID2", ...]);
 ```
 
+### Recursive child stencils
+
+From version 18 onwards, functionality has been added to allow for stencils to be built and accessed in a recursive way using the attribute `data-stencil-recurse = "stencilID to link to"`.  
+***Where:***
+
+```javascript
+    var recursiveList = stencil.define("recursiveList");
+    recursiveList.render({
+        title: "Infinite list",
+        list: {
+            listItem: [{
+                content: "foo"
+            }, {
+                content: "bar",
+                list: {
+                    listItem: [{
+                        content: "bar - foo"
+                    }, {
+                        content: "bar - bar",
+                        list: {
+                            listItem: [{
+                                content: "bar - bar - foo"
+                            }, {
+                                content: "bar - bar - black sheep"
+                            }]
+                        }
+                    }]
+                }
+            }]
+        }
+    });
+```
+
+***In:***
+
+```html
+    <stencil id="recursiveList">
+        <div>
+            <span>Title: {{title}}</span>
+            <stencil id="list">
+                <ul>
+                    <stencil id="listItem">
+                        <li>{{content}}</li>
+                        <stencil data-stencil-recurse="list"></stencil>
+                    </stencil>
+                </ul>
+            </stencil>
+        </div>
+    </stencil>
+```
+
+***Results:***
+
+```html
+    <div>
+        <span>Title: Infinite list</span>
+        <ul>
+            <li>foo</li>
+            <li>bar</li>
+            <ul>
+                <li>bar - foo</li>
+                <li>bar - bar</li>
+                <ul>
+                    <li>bar - bar - foo</li>
+                    <li>bar - bar - black sheep</li>
+                </ul>
+            </ul>
+        </ul>
+    </div>
+```
+
 ### Replication
 
 In order to duplicate templates, wrap the data object in an array as shown:    
@@ -615,6 +686,7 @@ Force no escaping HTML
 
 * data-stencil-childs - Declare all child stencil IDs here (without the initial #), space delimited  
 * data-stencil-destination - Declare the output destination here in jQuery selector format  
+* data-stencil-recurse - Declare the stencil ID to be a recursively linked child stencil
 
 `<select>`
 
