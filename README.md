@@ -2,7 +2,7 @@
 
 ###### *Javascript templating made easy*
 
-Version: 18.0
+Version: 18.0  
 Author: Kingston Chan <kgston@hotmail.com>  
 Last modified: 15 Jun 2016
 

@@ -255,6 +255,22 @@
         
         <div id="fetchStencilTestFirst" style="display:none"></div>
         <div id="fetchStencilTestSecond" style="display:none"></div>
+
+        <div id="recursiveStencilTest" style="display:none">
+            <stencil id="recursiveListRender">
+                <div>
+                    <span>Title: {{title}}</span>
+                    <stencil id="list">
+                        <ul>
+                            <stencil id="listItem">
+                                <li>{{content}}</li>
+                                <stencil data-stencil-recurse="list"></stencil>
+                            </stencil>
+                        </ul>
+                    </stencil>
+                </div>
+            </stencil>
+        </div>
     </div>
 </body>
 </html>

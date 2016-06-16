@@ -96,6 +96,7 @@ QUnit.module("Compilation", {
 });
 
 QUnit.test("Auto Build Test", function(assert) {
+    assert.expect(15);
     //Run auto build
     var autoStencils = stencil.build("autosandbox");
     //Check if objects are created
@@ -129,6 +130,7 @@ QUnit.test("Auto Build Test", function(assert) {
 });
 
 QUnit.test("Manual Build Test - Specified Tag only", function(assert) {
+    assert.expect(4);
     stencils.specificTag = stencil.define("specificTag");
     assert.ok(typeof stencils.specificTag === "object", "Stencil generation");
     assert.ok(Object.keys(stencils.specificTag.childStencils).length === 0, "Correct number of childStencils");
@@ -139,6 +141,7 @@ QUnit.test("Manual Build Test - Specified Tag only", function(assert) {
 });
 
 QUnit.test("Manual Build Test - Specified Tag with Destination And Nesting", function(assert) {
+    assert.expect(10);
     stencils.specificWithDest = stencil.define("specificWithDest", "#specificWithDestOutput");
     assert.ok(typeof stencils.specificWithDest === "object", "Stencil generation");
     assert.ok(Object.keys(stencils.specificWithDest.childStencils).length === 1, "Correct number of childStencils");
@@ -157,6 +160,7 @@ QUnit.test("Manual Build Test - Specified Tag with Destination And Nesting", fun
 });
 
 QUnit.test("Manual Build Test - Specified Tag with Destination and Specfic Childs", function(assert) {
+    assert.expect(5);
     stencils.specificInner = stencil.define("specificInner", "#specificInnerOutput");
     assert.ok(typeof stencils.specificInner === "object", "Stencil generation");
     assert.ok(Object.keys(stencils.specificInner.childStencils).length === 2, "Correct number of childStencils");
@@ -167,6 +171,7 @@ QUnit.test("Manual Build Test - Specified Tag with Destination and Specfic Child
 });
 
 QUnit.test("Manual Build Test - Specified Tag without Destination but with Specific Childs and Defined Output Container", function(assert) {
+    assert.expect(5);
     stencils.definedOutput = stencil.define("definedOutput", null, "div");
     assert.ok(typeof stencils.definedOutput === "object", "Stencil generation");
     assert.ok(Object.keys(stencils.definedOutput.childStencils).length === 1, "Correct number of childStencils");
@@ -179,6 +184,7 @@ QUnit.test("Manual Build Test - Specified Tag without Destination but with Speci
 });
 
 QUnit.test("Clone Test - Existing Tag with New Destination", function(assert) {
+    assert.expect(6);
     stencils.cloned = stencil.define("toBeCloned", "#clonedOutput");
     assert.ok(typeof stencils.cloned === "object", "Stencil generation");
     assert.ok(stencils.cloned.guid !== stencils.toBeCloned.guid, "guid is fresh");
@@ -244,6 +250,7 @@ QUnit.test("Fetch Test - Destination Override", function(assert) {
 });
 
 QUnit.test("Fetch Test - Invalid file", function(assert) {
+    assert.expect(1);
     var getStencils = stencil.fetch("unknownFile.stencil");
     var done = assert.async();
     
@@ -263,6 +270,7 @@ QUnit.test("Fetch Test - Invalid file", function(assert) {
 QUnit.module("Rendering", {
     beforeEach: function(assert) {
         if (!render.rendered) {
+            render.rendered = true;
             var done = assert.async();
             
             render.simpleRender = stencil.define("simpleRender");
@@ -283,26 +291,26 @@ QUnit.module("Rendering", {
             render.deepNestedChildStencilRender = stencil.define("deepNestedChildStencilRender");
             render.htmlEscapeStencilRender = stencil.define("htmlEscapeStencilRender");
             render.imgsrcStencilRender = stencil.define("imgsrcStencilRender");
+            render.recursiveListRender = stencil.define("recursiveListRender");
             stencil.fetch("fetchStencilTest.stencil")
                 .progress(function(template) {
                     render[template.tagID] = template;
                 })
                 .done(function() {
-                    assert.ok(true, "Fetched fetchStencilTest.stencil");
+                    //assert.ok(true, "Fetched fetchStencilTest.stencil");
                     done();
                 })
                 .fail(function() {
-                    assert.ok(false, "Unable to fetch fetchStencilTest.stencil");
+                    //assert.ok(false, "Unable to fetch fetchStencilTest.stencil");
                     done();
                 });
-            
-            render.rendered = true;
         }
     },
     afterEach: function() {}
 });
 
 QUnit.test("Iteration Test", function(assert) {
+    assert.expect(7);
     var dataset = [];
     for (var i = 0; i < options.iterationCount; i++) {
         dataset.push({ contents: ("test " + i) });
@@ -315,6 +323,7 @@ QUnit.test("Iteration Test", function(assert) {
 });
 
 QUnit.test("Deep Object Value Test", function(assert) {
+    assert.expect(7);
     var dataset = [];
     for (var i = 0; i < options.iterationCount; i++) {
         dataset.push({ first: { second: { contents: ("deep " + i) } } });
@@ -327,6 +336,7 @@ QUnit.test("Deep Object Value Test", function(assert) {
 });
 
 QUnit.test("Nested Object Key Test", function(assert) {
+    assert.expect(7);
     var dataset = [];
     for (var i = 0; i < options.iterationCount; i++) {
         var obj = { nestedKey: "hello" + i };
@@ -341,12 +351,14 @@ QUnit.test("Nested Object Key Test", function(assert) {
 });
 
 QUnit.test("No Dataset Test", function(assert) {
+    assert.expect(2);
     var dataset = [];
     assert.ok(!render.noDataRender.render(dataset), "No render output");
     assert.ok($("#noDataRenderTest>stencil-output").children().length === 0, "Output validation for number of iteration");
 });
 
 QUnit.test("Blank Dataset Test", function(assert) {
+    assert.expect(7);
     var dataset = [];
     for (var i = 0; i < options.iterationCount; i++) {
         dataset.push({});
@@ -359,6 +371,7 @@ QUnit.test("Blank Dataset Test", function(assert) {
 });
 
 QUnit.test("Child Stencils Iteration Test", function(assert) {
+    assert.expect(132);
     var dataset = [];
     var container = [];
     var child = [];
@@ -410,6 +423,7 @@ QUnit.test("Child Stencils Iteration Test", function(assert) {
 });
 
 QUnit.test("Cloned Template Test", function(assert) {
+    assert.expect(132);
     var dataset = [];
     var container = [];
     var child = [];
@@ -461,6 +475,7 @@ QUnit.test("Cloned Template Test", function(assert) {
 });
 
 QUnit.test("Output Append Test", function(assert) {
+    assert.expect(8);
     var dataset = [];
     for (var i = 0; i < options.iterationCount; i++) {
         dataset.push({ contents: ("append " + i) });
@@ -474,6 +489,7 @@ QUnit.test("Output Append Test", function(assert) {
 });
 
 QUnit.test("Output Prepend Test", function(assert) {
+    assert.expect(8);
     var dataset = [];
     for (var i = 0; i < options.iterationCount; i++) {
         dataset.push({ contents: ("prepend " + i) });
@@ -508,6 +524,7 @@ QUnit.test("Output None Test", function(assert) {
 });
 
 QUnit.test("Output Fragment Test", function(assert) {
+    assert.expect(15);
     var dataset = [];
     for (var i = 0; i < options.iterationCount; i++) {
         dataset.push({ contents: ("fragment " + i) });
@@ -534,6 +551,7 @@ QUnit.test("Output Fragment Test", function(assert) {
 });
 
 QUnit.test("Specific Child Output Test", function(assert) {
+    assert.expect(57);
     var dataset = [];
     var child1 = [];
     var child2 = [];
@@ -583,6 +601,7 @@ QUnit.test("Specific Child Output Test", function(assert) {
 });
 
 QUnit.test("Nested Output & Selector Test", function(assert) {
+    assert.expect(14);
     var dataset = [];
     for (var i = 0; i < options.iterationCount; i++) {
         dataset.push({
@@ -617,6 +636,7 @@ QUnit.test("Nested Output & Selector Test", function(assert) {
 });
 
 QUnit.test("Clear Test", function(assert) {
+    assert.expect(9);
     var dataset = [];
     for (var i = 0; i < options.iterationCount; i++) {
         dataset.push({ contents: ("clear " + i) });
@@ -632,6 +652,7 @@ QUnit.test("Clear Test", function(assert) {
 });
 
 QUnit.test("Attribute Defined Child Stencil Test", function(assert) {
+    assert.expect(26);
     var dataset = {
         content: "outerStencil",
         innerStencil: []
@@ -659,6 +680,7 @@ QUnit.test("Attribute Defined Child Stencil Test", function(assert) {
 });
 
 QUnit.test("Deep Nested Child Stencil Test", function(assert) {
+    assert.expect(37);
     var dataset = {
         tableRow: []
     };
@@ -688,6 +710,7 @@ QUnit.test("Deep Nested Child Stencil Test", function(assert) {
 });
 
 QUnit.test("HTML Escaping and Flags Stencil Test", function(assert) {
+    assert.expect(5);
     var escaped = "&lt;ul&gt;&lt;li&gt;this is a list&lt;/li&gt;&lt;/ul&gt;"
     var content = "<ul><li>this is a list</li></ul>"
     
@@ -704,6 +727,7 @@ QUnit.test("HTML Escaping and Flags Stencil Test", function(assert) {
 });
 
 QUnit.test("Imgsrc test", function(assert) {
+    assert.expect(2);
     var dataset = {
         imgsrc: "imgURL/abcdef.test"
     };
@@ -747,4 +771,35 @@ QUnit.test("Fetch test", function(assert) {
     outputSecond.each(function(index) {
         assert.ok(this.innerHTML === "Second - " + index, "Correct output for second - " + index);
     });
+});
+
+QUnit.test("Recursive test", function(assert) {
+    assert.expect(8);
+    var dataset = {
+        title: "Infinite list"
+    }
+
+    var lastUsed = dataset;
+    for(var i = 0; i < options.iterationCount; i++) {
+        var current = {
+            content: i
+        }
+        lastUsed.list = {};
+        lastUsed.list.listItem = current;
+        lastUsed = current;
+    }
+    
+    assert.ok(render.recursiveListRender.render(dataset), "Render output");
+
+    var output = $("#recursiveStencilTest");
+    var anchor = output.find("span");
+    assert.ok(anchor.text() === "Title: Infinite list", "Correct basic text");
+    assert.ok(output.find("ul").length === options.iterationCount, "Correct number of recursive elements");
+    anchor = anchor.next();
+
+    for(var i = 0; i < options.iterationCount; i++) {
+        anchor = anchor.children("li");
+        assert.ok(anchor.text() == i, "Correct output for recurse level " + i);
+        anchor = anchor.next();
+    }
 });
