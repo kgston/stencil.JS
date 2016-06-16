@@ -52,7 +52,7 @@
 
 ## version 13.1
 
-1. Upgraded guid function to take advantage of performance.now() if avaliable
+1. Upgraded guid function to take advantage of performance.now() if available
 1. Included author info in source
 1. Added a getChild function in the stencil object to recursively find any child stencil under its parent
 
@@ -87,7 +87,7 @@
 
 ## version 16
 
-1. Added functionality to allow for HTML tags defined childStencils (within a parent stencil tag) to automatically recourse giving it full functionality of a  nested stencil tag
+1. Added functionality to allow for HTML tags defined childStencils (within a parent stencil tag) to automatically recourse giving it full functionality of a nested stencil tag
 
 ## version 16.1
 
