@@ -83,7 +83,7 @@
 
 ## version 15.1
 
-1. Added an additional filter for only selecting stencil objects when fetching a stencil
+1. Added an additional filter for only selecting stencil objects when using the fetch API
 
 ## version 16
 
@@ -113,3 +113,7 @@
 ## version 18.0
 
 1. Added recursive template functionality
+
+## version 18.1
+
+1. Fixed bug where fetch API does not link recursive templates properly

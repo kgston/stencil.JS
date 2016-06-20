@@ -1,6 +1,6 @@
 /**
  * @preserve stencil.js
- * version 18.0 - 06 Jun 2015
+ * version 18.1 - 20 Jun 2015
  * Kingston Chan - Released under the MIT licence
  * https://github.com/kgston/stencil.JS
 */
@@ -60,9 +60,13 @@ stencil = $.extend(stencil || {}, (function() {
                     var $template = $(this);
                     var outputDestination = destination || $template.attr(stencil.attributes.destination) || "none";
                     var fetchedTemplate = stencil.define($template.attr("id"), outputDestination, null, $template);
+                    //Manually build recursive links, if any, due to use of the stencilFragment param
+                    stencil.util.buildRecursiveLinkages(fetchedTemplate);
                     templatesList.push(fetchedTemplate);
+                    //Update the promise
                     fetchRequest.notify(fetchedTemplate);
                 });
+                //Resolve the promise when completed
                 fetchRequest.resolve(templatesList);
 
             }).fail(function(jqXHR) {

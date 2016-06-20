@@ -6,6 +6,7 @@ render.rendered = false;
 var autoStencils;
 
 options.iterationCount = 5;
+options.fetchCount = 3;
 
 var isGUID = function(guid) {
     return /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/.test(guid);
@@ -196,7 +197,7 @@ QUnit.test("Clone Test - Existing Tag with New Destination", function(assert) {
 
 QUnit.test("Fetch Test", function(assert) {
     var getStencils = stencil.fetch("fetchStencilTest.stencil");
-    var done = assert.async(3);
+    var done = assert.async(options.fetchCount + 1);
     
     assert.expect(9);
     getStencils.progress(function(template) {
@@ -213,7 +214,7 @@ QUnit.test("Fetch Test", function(assert) {
         }
         done();
     }).done(function(templateList) {
-        assert.ok(templateList.length === 2, "Correct number of stencils defined");
+        assert.ok(templateList.length === options.fetchCount, "Correct number of stencils defined");
         done();
     }).fail(function() {
         assert.ok(false, "Unable to fetch stencils");
@@ -223,7 +224,7 @@ QUnit.test("Fetch Test", function(assert) {
 
 QUnit.test("Fetch Test - Destination Override", function(assert) {
     var getStencils = stencil.fetch("fetchStencilTest.stencil", "#fetchOverrideOutput");
-    var done = assert.async(3);
+    var done = assert.async(options.fetchCount + 1);
     
     assert.expect(9);
     getStencils.progress(function(template) {
@@ -240,7 +241,7 @@ QUnit.test("Fetch Test - Destination Override", function(assert) {
         }
         done();
     }).done(function(templateList) {
-        assert.ok(templateList.length === 2, "Correct number of stencils defined");
+        assert.ok(templateList.length === options.fetchCount, "Correct number of stencils defined");
         done();
     }).fail(function() {
         assert.ok(false, "Unable to fetch stencils");
@@ -792,6 +793,37 @@ QUnit.test("Recursive test", function(assert) {
     assert.ok(render.recursiveListRender.render(dataset), "Render output");
 
     var output = $("#recursiveStencilTest");
+    var anchor = output.find("span");
+    assert.ok(anchor.text() === "Title: Infinite list", "Correct basic text");
+    assert.ok(output.find("ul").length === options.iterationCount, "Correct number of recursive elements");
+    anchor = anchor.next();
+
+    for(var i = 0; i < options.iterationCount; i++) {
+        anchor = anchor.children("li");
+        assert.ok(anchor.text() == i, "Correct output for recurse level " + i);
+        anchor = anchor.next();
+    }
+});
+
+QUnit.test("Fetched recursive test", function(assert) {
+    assert.expect(8);
+    var dataset = {
+        title: "Infinite list"
+    }
+
+    var lastUsed = dataset;
+    for(var i = 0; i < options.iterationCount; i++) {
+        var current = {
+            content: i
+        }
+        lastUsed.list = {};
+        lastUsed.list.listItem = current;
+        lastUsed = current;
+    }
+    
+    assert.ok(render.fetchedRecursiveListRender.render(dataset), "Render output");
+
+    var output = $("#fetchRecursiveStencilTest");
     var anchor = output.find("span");
     assert.ok(anchor.text() === "Title: Infinite list", "Correct basic text");
     assert.ok(output.find("ul").length === options.iterationCount, "Correct number of recursive elements");

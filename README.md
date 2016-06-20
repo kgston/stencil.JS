@@ -2,9 +2,9 @@
 
 ###### *Javascript templating made easy*
 
-Version: 18.0  
+Version: 18.1  
 Author: Kingston Chan <kgston@hotmail.com>  
-Last modified: 15 Jun 2016
+Last modified: 20 Jun 2016
 
 Copyright (c) 2014-2016 Kingston Chan. This software is provided as-is under The MIT Licence (Expat).  
 *Full legal text can be found in licence.txt*
