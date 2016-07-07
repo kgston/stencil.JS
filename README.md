@@ -151,7 +151,7 @@ By default, Stencil will remove your stencil template after "compilation". If yo
 Once you have compiled the stencil and built your template, we can finally render the finalized stencil with the data inside it. Use the following command to generate the output:
 
 ```javascript
-    myStencil.render(JSON);
+    myStencil.render(json);
 ```
 
 Where `JSON` is an array of objects. Each object should contain all the key value pairs for one stencil. Multiple objects in an array will generate multiple copies of the stencil with the respective objects in the order of insertion. If a key value is not found, the engine will leave the field blank and log to the console, if debug is on.
@@ -159,11 +159,11 @@ Where `JSON` is an array of objects. Each object should contain all the key valu
 Each stencil object is linked to an output location and does not change over the lifetime of the object. If you would want to hide and get a document fragment, not hide and get a document fragment, get a pure string output, append or prepend the generated stencil to the output, you can use the following syntax:
 
 ```javascript
-    myStencil.render(JSON, "none");
-    myStencil.render(JSON, "fragment");
-    myStencil.render(JSON, "string");
-    myStencil.render(JSON, "append");
-    myStencil.render(JSON, "prepend");
+    myStencil.render(json, "none");
+    myStencil.render(json, "fragment");
+    myStencil.render(json, "string");
+    myStencil.render(json, "append");
+    myStencil.render(json, "prepend");
 ```
 
 ### Data Insertion
@@ -172,10 +172,10 @@ In order to insert data into a stencil template
 
 ```javascript
     var template = stencil.define("template");
-    var JSON = {
+    var json = {
         value: "foo"
     };
-    template.render(JSON);
+    template.render(json);
 ```
 
 ***In:***
@@ -199,12 +199,12 @@ In order to nest child stencils, use the following syntax:
 
 ```javascript
     var template = stencil.define("template");
-    var JSON = {
+    var json = {
         child: {
             value: "foo"
         }
     };
-    template.render(JSON);
+    template.render(json);
 ```
 
 ***In:***
@@ -229,7 +229,7 @@ In certain cases where `<stencil>` tags are not allowed to be nested in certain 
 
 ```javascript
     var template = stencil.define("template");
-    var JSON = {
+    var json = {
         listsTitle: "My List",
         primaryList: [{
             item: "primary"
@@ -263,7 +263,7 @@ In certain cases where `<stencil>` tags are not allowed to be nested in certain 
             }]
         }]
     }
-    template.render(JSON);
+    template.render(json);
 ```
 
 ***In:***
@@ -399,7 +399,7 @@ In order to duplicate templates, wrap the data object in an array as shown:
 
 ```javascript
     var template = stencil.define("template");
-    var JSON = [{
+    var json = [{
         parentKey: "alpha",
         child: [{
             value: "alpha - foo"
@@ -414,7 +414,7 @@ In order to duplicate templates, wrap the data object in an array as shown:
             value: "beta - bar"
         }]
     }];
-    template.render(JSON);
+    template.render(json);
 ```
 
 ***In:***
@@ -446,14 +446,14 @@ In order to map data from the JSON object into the stencil, use the following sy
 
 ```javascript
     var template = stencil.define("template");
-    var JSON = {
+    var json = {
         firstLevel: {
             secondLevel: {
                 thirdLevel: ["foo", "bar", "cat"]
             }
         }
     };
-    template.render(JSON);
+    template.render(json);
 ```
 
 ***In:***
@@ -477,8 +477,8 @@ Stencil also supports nested keys, allowing runtime determination of the final J
 
 ```javascript
     var template = stencil.define("template");
-    var JSON = {foo1b: "valueToBeInserted", index: 1, alphaIndex: b};
-    template.render(JSON);
+    var json = {foo1b: "valueToBeInserted", index: 1, alphaIndex: b};
+    template.render(json);
 ```
 
 ***In:***
@@ -502,12 +502,12 @@ By default, a child stencil will not have access to its parents dataset and whil
 
 ```javascript 
     var template = stencil.define("template");
-    var JSON = {
+    var json = {
         global: {foo: "accessableByAllStencils"}, 
         bar: "accessableOnlyByLocalStencil",
         child: {}
     };
-    template.render(JSON);
+    template.render(json);
 ```
 
 ***In:***
@@ -543,8 +543,8 @@ In order to use the selector to automatically select an option in a drop down me
 
 ```javascript
     var template = stencil.define("template");
-    var JSON = {firstLevel:{secondLevel:"bar"};
-    template.render(JSON);
+    var json = {firstLevel:{secondLevel:"bar"};
+    template.render(json);
 ```
 
 ***In:***
@@ -575,8 +575,8 @@ Putting in `{{variables}}` in src attributes of img tags was causing 404 errors 
 
 ```javascript
     var template = stencil.define("template");
-    var JSON = {firstLevel:{secondLevel:"imgURL"};
-    template.render(JSON);
+    var json = {firstLevel:{secondLevel:"imgURL"};
+    template.render(json);
 ```
 
 ***In:***
